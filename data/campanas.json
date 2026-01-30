@@ -4,6 +4,123 @@
   "campaigns": [
     {
       "id": 1,
+      "card": "ifmc",
+      "type": "bienvenida",
+      "geo": "baleares,canarias",
+      "title": "IKEA Family MC - Bienvenida",
+      "desc": "Bienvenida",
+      "text": "La tarjeta IKEA Family Mastercard es emitida por Santander Consumer Finance, S.A., y está sujeta a su aprobación. *CASHBACK es un beneficio ofrecido por el Club de Ventajas de la sociedad Ventajon S.A., según indican las condiciones generales en www.IKEAfamily.net/condiciones-generales-de-ikea-family (cláusula 4.1) del programa de fidelidad IKEA Family. La vigencia de los descuentos aparece indicada en www.IKEAFamily.net. Sólo se recibirán CASHBACK por las compras realizadas con tarjeta IKEA Family Mastercard en cualquiera de los establecimientos asociados adheridos al programa de descuentos IKEA Family. La transferencia de CASHBACK se recibirá 35 días después de finalizar el mes en que se realizaron las compras, una vez acumulado un mínimo de 3€ en descuentos y cobrado a los establecimientos asociados. CASHBACK es acumulable con otro tipo de ofertas excepto que se indique lo contrario. Consulta los establecimientos asociados en www.IKEAfamily.net/empresas-asociadas. Oferta válida hasta el 31/12/2025."
+    },
+    {
+      "id": 2,
+      "card": "ifmc",
+      "type": "bienvenida",
+      "geo": "baleares,canarias",
+      "title": "IKEA Family MC - Bienvenida",
+      "desc": "Bienvenida",
+      "text": "La tarjeta IKEA Family Mastercard es emitida por Santander Consumer Finance, S.A., y está sujeta a su aprobación. *2% de descuento en pagos realizados con tarjeta IKEA Family Mastercard en cualquier comercio físico u online del mundo (asociados y no asociados), según indican las condiciones generales en www.IKEAfamily.net/condiciones-generales-de-ikea-family (cláusula 4.2). Los descuentos son reembolsados en cheque de compra y son acumulables con otro tipo de ofertas excepto que se indique lo contrario. El cheque de compra se genera 35 días después de finalizar el mes en que se realizaron las compras y acumulando descuentos por un mínimo de 3€ y un máximo de 10€. El cheque de compra es válido para canjear en muebles y decoración de IKEA Baleares y Canarias o en www.islas.IKEA.es. Oferta válida hasta 31/12/2025 para titulares de tarjeta IKEA Family Mastercard residentes en Baleares y Canarias."
+    },
+    {
+      "id": 3,
+      "card": "ifmc",
+      "type": "cashback",
+      "geo": "baleares,canarias",
+      "title": "IKEA Family MC - CASH BACK",
+      "desc": "CASH BACK",
+      "text": "La tarjeta IKEA Family Mastercard es emitida por Santander Consumer Finance, S.A., y está sujeta a su aprobación. *X% CASHBACK en XXXXXXXXXX y X% CASHBACK en XXXXXXXXXXX del XX/XX/XXXX al XX/XX/XXXX. Promociones válidas para compras realizadas con tarjeta IKEA Family Mastercard y disponible exclusivamente en establecimientos asociados al programa. CASHBACK es un beneficio del programa IKEA Family, ofrecido por Ventajon S.A., según indican las condiciones generales en www.IKEAfamily.net/condiciones-generales-de-ikea-family (cláusula 4.1) del programa de fidelidad IKEA Family."
+    },
+    {
+      "id": 4,
+      "card": "ifmc",
+      "type": "bienvenida",
+      "geo": "baleares,canarias",
+      "title": "IKEA Family MC - Bienvenida",
+      "desc": "10% CASHBACK",
+      "text": "La tarjeta IKEA Family Mastercard es emitida por Santander Consumer Finance, S.A., y está sujeta a su aprobación. *10% CASHBACK en muebles y decoración o en www.islas.IKEA de IKEA Baleares y Canarias durante 5 días consecutivos desde fecha de alta de tarjeta IKEA Family Mastercard y aplicable a un importe máximo de 3.000€ (5% CASHBACK a partir del sexto día), 30% CASHBACK en Restaurante Sueco y Bistro Sueco de IKEA en la primera compra (10% CASHBACK a partir de la segunda compra) y 10% CASHBACK en Tienda Sueca de IKEA el primer día de compras (5% CASHBACK a partir del segundo día). No acumulable a financiación sin intereses ni otras ofertas. Oferta válida para tarjetas IKEA Family Mastercard dadas de alta entre el 01/01/2025 y el 31/12/2025. Consulta los establecimientos asociados en www.IKEAfamily.net/empresas-asociadas. CASHBACK es un beneficio del programa IKEA Family, ofrecido por Ventajon S.A., según indican las condiciones generales en www.IKEAfamily.net/condiciones-generales-de-ikea-family (cláusula 4.1) del programa de fidelidad IKEA Family."
+    },
+    {
+      "id": 5,
+      "card": "ifmc",
+      "type": "cumpleanos",
+      "geo": "baleares,canarias",
+      "title": "IKEA Family MC - Cumpleaños",
+      "desc": "10% CASHBACK",
+      "text": "La tarjeta IKEA Family Mastercard es emitida por Santander Consumer Finance, S.A., y está sujeta a su aprobación. *10% CASHBACK en IKEA Baleares y Canarias en muebles y decoración, Tienda Sueca y en www.islas.IKEA.es el día del cumpleaños, dos días antes y dos días después. Válido para compras realizadas mediante tarjeta IKEA Family Mastercard y aplicado a un importe máximo de 3.000€. No acumulable a financiación sin intereses ni otras ofertas. CASHBACK es un beneficio del programa IKEA Family, ofrecido por Ventajon S.A., según indican las condiciones generales en www.IKEAfamily.net/condiciones-generales-de-ikea-family (cláusula 4.1) del programa de fidelidad IKEA Family."
+    },
+    {
+      "id": 6,
+      "card": "ifmc",
+      "type": "cashback",
+      "geo": "baleares,canarias",
+      "title": "IKEA Family MC - CASH BACK",
+      "desc": "CASH BACK",
+      "text": "TEXTO LEGAL: La tarjeta IKEA Family Mastercard es emitida por Santander Consumer Finance, S.A., y está sujeta a su aprobación. * Comisión 3%, con un mínimo de 3€ a descontar del importe a transferir. Previa autorización por parte de Santander Consumer Finance, S.A."
+    },
+    {
+      "id": 7,
+      "card": "ifmc",
+      "type": "cashback",
+      "geo": "baleares,canarias",
+      "title": "IKEA Family MC - CASH BACK",
+      "desc": "CASH BACK",
+      "text": "TEXTO LEGAL: La tarjeta IKEA Family Mastercard es emitida por Santander Consumer Finance, S.A., y está sujeta a su aprobación. * Comisión 5%, con un mínimo de 3€ y el importe máximo diario a retirar es de 300€. Previa autorización por parte de Santander Consumer Finance, S.A."
+    },
+    {
+      "id": 8,
+      "card": "ifmc",
+      "type": "financiacion_sin",
+      "geo": "baleares,canarias",
+      "title": "IKEA Family MC - Financiación Sin Intereses",
+      "desc": "Financiación Sin Intereses",
+      "text": "*La tarjeta IKEA Family Mastercard es emitida por Santander Consumer Finance, S.A., y está sujeta a su aprobación. Importe mínimo de financiación 4.000€. Importe máximo de financiación 6.000 €. Ejemplo financiación de 4.000€. Ejemplo financiación en 48 meses de 4.032€. Importe de las 48 cuotas 84€. Precio total a plazos e importe adeudado 4.032€. Coste total del Cheque de compraédito e intereses 0€. T.I.N. 0%, T.A.E. 0%. Siendo el día de contratación 01/05/2025 y primer pago el 30/06/2025. Sistema de amortización francés. No acumulable a CASHBACK ni otras ofertas y válida para compras realizadas en Cocinas de IKEA Baleares y Canarias. Oferta válida desde el 01/05/2025 hasta 30/06/2025. Intereses subvencionados por IKEA."
+    },
+    {
+      "id": 9,
+      "card": "ifmc",
+      "type": "financiacion_sin",
+      "geo": "baleares,canarias",
+      "title": "IKEA Family MC - Financiación Sin Intereses",
+      "desc": "Financiación Sin Intereses",
+      "text": "*La tarjeta IKEA Family Mastercard es emitida por Santander Consumer Finance, S.A., y está sujeta a su aprobación. Financiación a 3, 6, 10, 12, 18, 24, 36 y 48 meses sin intereses para compras con importe mínimo de 120€, 240€, 400€, 600€, 1.200€, 2.400€, 3.000€ y 4.000€ respectivamente, y máximo de 6.000€. Ejemplo financiación en 12 meses de 720€. Importe de las 12 cuotas 60€. Precio total a plazos e importe adeudado 720€. Coste total del Cheque de compraédito e intereses 0€. T.I.N. 0%, T.A.E. 0%. Siendo el día de contratación 01/05/2025 y primer pago el 30/06/2025. Sistema de amortización francés. No acumulable a CASHBACK ni otras ofertas y válida para compras realizadas en Cocinas de IKEA Baleares y Canarias. Oferta válida desde 01/05/2025 hasta 30/06/2025. Intereses subvencionados por IKEA."
+    },
+    {
+      "id": 10,
+      "card": "ifmc",
+      "type": "financiacion_sin",
+      "geo": "baleares,canarias",
+      "title": "IKEA Family MC - Financiación Sin Intereses",
+      "desc": "Financiación Sin Intereses",
+      "text": "*La tarjeta IKEA Family Mastercard es emitida por Santander Consumer Finance, S.A., y está sujeta a su aprobación. Financiación a 3, 6, 10, 12, 18 y 24 meses sin intereses para compras con importe mínimo de 120€, 240€, 400€, 600€, 1.200€ y 2.400€ respectivamente, y máximo de 6.000€. Ejemplo financiación en 12 meses de 720€. Importe de las 12 cuotas 60€. Precio total a plazos e importe adeudado: 720€. Coste total del Cheque de compraédito e intereses 0€. T.I.N. 0%, T.A.E. 0%. Siendo el día de contratación 01/10/2025 y primer pago el 01/11/2025. Sistema de amortización francés. No acumulable a CASHBACK ni otras ofertas y válida para compras en IKEA Baleares y Canarias hasta 31/12/2025. Intereses subvencionados por IKEA."
+    },
+    {
+      "id": 11,
+      "card": "ifmc",
+      "type": "financiacion_sin",
+      "geo": "baleares,canarias",
+      "title": "IKEA Family MC - Financiación Sin Intereses",
+      "desc": "Financiación Sin Intereses",
+      "text": "*La tarjeta IKEA Family Mastercard es emitida por Santander Consumer Finance, S.A., y está sujeta a su aprobación. Financiación a 3, 6, 10 y 12 meses sin intereses para compras con importe mínimo de 150€ para 3 meses y 300€ para 6, 10 y 12 meses y hasta un máximo de 6.000€. Ejemplo financiación en 12 meses de 720€. Importe de las 12 cuotas 60€. Precio total a plazos e importe adeudado: 720€. Coste total del Cheque de compraédito e intereses 0€. T.I.N. 0%, T.A.E. 0%. Siendo el día de contratación 01/10/2025 y primer pago el 01/11/2025. Sistema de amortización francés. No acumulable a CASHBACK ni otras ofertas y válida para compras en IKEA Baleares y Canarias hasta 31/12/2025. Intereses subvencionados por IKEA."
+    },
+    {
+      "id": 12,
+      "card": "ifmc",
+      "type": "financiacion_sin",
+      "geo": "canarias",
+      "title": "IKEA Family MC - Financiación Sin Intereses",
+      "desc": "Financiación Sin Intereses",
+      "text": "*La tarjeta IKEA Family Mastercard es emitida por Santander Consumer Finance, S.A., y está sujeta a su aprobación. Financiación a 3 y 6 meses sin intereses para compras con importe mínimo de 60€ y 120€ respectivamente, y máximo de 6.000€. Ejemplo financiación en 6 meses de 120€. Importe de las 6 cuotas 20€. Precio total a plazos e importe adeudado: 120€. Coste total del Cheque de compraédito e intereses 0€. T.I.N. 0%, T.A.E. 0%. Siendo el día de contratación 01/10/2025 y primer pago el 01/11/2025. Sistema de amortización francés. No acumulable a CASHBACK ni otras ofertas y válida para compras realizadas en INSIDE LOGISTICS, S.L. de IKEA Tenerife, Punto de Entrega IKEA Tenerife Sur y Punto de Entrega IKEA La Palma. Oferta válida hasta 31/12/2025. Intereses subvencionados por INSIDE LOGISTICS, S.L."
+    },
+    {
+      "id": 13,
+      "card": "vjon",
+      "type": "financiacion_sin",
+      "geo": "canarias",
+      "title": "Ventajon Visa - Financiación Sin Intereses",
+      "desc": "Financiación Sin Intereses",
+      "text": "Publicidad *La tarjeta VENTAJON es emitida por la Entidad de Pago híbrida CaixaBank Payments & Consumer E.F.C., E.P., S.A.U., y está sujeta a su autorización. La entidad ha escogido como sistema de protección de los fondos recibidos de usuarios de servicios de pago que presta su depósito en una cuenta bancaria separada abierta en CaixaBank, S.A. T.I.N. 0% T.A.E. 0%. Financiación a 3 y 6 meses sin intereses para compras iguales o superiores a 90€ y 120€ respectivamente, y máximo de 3.000€. Ejemplo representativo para una compra financiada en 6 meses de 120€. Importe de las 6 cuotas 20€. Precio total a plazos e importe total adeudado: 120€. Coste total del Cheque de compraédito e intereses 0%. Sistema de amortización francés. No acumulable a CASHBACK ni otras ofertas y válida para compras realizadas en INSIDE LOGISTICS, S.L. de IKEA Tenerife, Punto de Entrega IKEA Tenerife Sur y Punto de Entrega IKEA La Palma. Oferta válida hasta 31/12/2025. Intereses subvencionados por INSIDE LOGISTICS, S.L."
+    },
+    {
+      "id": 1,
       "card": "vjon",
       "type": "bienvenida",
       "geo": "baleares,canarias",
@@ -127,123 +244,6 @@
       "title": "Ventajon Visa - Bienvenida",
       "desc": "10% cash back",
       "text": "La tarjeta Ventajon es emitida por la Entidad de Pago híbrida CaixaBank Payments & Consumer E.F.C., E.P., S.A.U., y está sujeta a su autorización. La entidad ha escogido como sistema de protección de los fondos recibidos de usuarios de servicios de pago que presta su depósito en una cuenta bancaria separada abierta en CaixaBank, S.A. (1) 10% cash back en Tienda Online Ventajon, gasolineras y ópticas asociadas válido hasta XX/XX/XXXX. El importe máximo de bonificación es de 200€. (2) cash back es un beneficio ofrecido por el Club de Ventajas de la sociedad Ventajon S.A., según indican las condiciones generales en www.Ventajon.com/condiciones-generales (cláusula 4.1) del programa de fidelidad Ventajon. Sólo se recibirán cash back por las compras realizadas con tarjeta Ventajon en cualquiera de los establecimientos asociados adheridos al programa Ventajon. Consulta los establecimientos asociados en www.Ventajon.com/empresas-asociadas/mapa. Oferta válida hasta 31/12/2025. (3) 2% de descuento en pagos realizados con tarjeta Ventajon Visa en cualquier comercio físico u online del mundo (asociados y no asociados), según indican las condiciones generales en www.Ventajon.com/condiciones-generales-contratacion (cláusula 4.2). Los descuentos son reembolsados en cheque de compra y son acumulables con otro tipo de ofertas excepto que se indique lo contrario. El cheque de compra se genera 35 días después de finalizar el mes en que se realizaron las compras y acumulando descuentos por un mínimo de 3€ y un máximo de 10€. El cheque de compra es válido para 1 sola compra con importe mínimo de 25€ y canjeable en Tienda Online Ventajon. Oferta válida hasta 31/12/2025 para titulares de tarjeta Ventajon Visa residentes en Península."
-    },
-    {
-      "id": 1,
-      "card": "ifmc",
-      "type": "bienvenida",
-      "geo": "baleares,canarias",
-      "title": "IKEA Family MC - Bienvenida",
-      "desc": "Bienvenida",
-      "text": "La tarjeta IKEA Family Mastercard es emitida por Santander Consumer Finance, S.A., y está sujeta a su aprobación. *CASHBACK es un beneficio ofrecido por el Club de Ventajas de la sociedad Ventajon S.A., según indican las condiciones generales en www.IKEAfamily.net/condiciones-generales-de-ikea-family (cláusula 4.1) del programa de fidelidad IKEA Family. La vigencia de los descuentos aparece indicada en www.IKEAFamily.net. Sólo se recibirán CASHBACK por las compras realizadas con tarjeta IKEA Family Mastercard en cualquiera de los establecimientos asociados adheridos al programa de descuentos IKEA Family. La transferencia de CASHBACK se recibirá 35 días después de finalizar el mes en que se realizaron las compras, una vez acumulado un mínimo de 3€ en descuentos y cobrado a los establecimientos asociados. CASHBACK es acumulable con otro tipo de ofertas excepto que se indique lo contrario. Consulta los establecimientos asociados en www.IKEAfamily.net/empresas-asociadas. Oferta válida hasta el 31/12/2025."
-    },
-    {
-      "id": 2,
-      "card": "ifmc",
-      "type": "bienvenida",
-      "geo": "baleares,canarias",
-      "title": "IKEA Family MC - Bienvenida",
-      "desc": "Bienvenida",
-      "text": "La tarjeta IKEA Family Mastercard es emitida por Santander Consumer Finance, S.A., y está sujeta a su aprobación. *2% de descuento en pagos realizados con tarjeta IKEA Family Mastercard en cualquier comercio físico u online del mundo (asociados y no asociados), según indican las condiciones generales en www.IKEAfamily.net/condiciones-generales-de-ikea-family (cláusula 4.2). Los descuentos son reembolsados en cheque de compra y son acumulables con otro tipo de ofertas excepto que se indique lo contrario. El cheque de compra se genera 35 días después de finalizar el mes en que se realizaron las compras y acumulando descuentos por un mínimo de 3€ y un máximo de 10€. El cheque de compra es válido para canjear en muebles y decoración de IKEA Baleares y Canarias o en www.islas.IKEA.es. Oferta válida hasta 31/12/2025 para titulares de tarjeta IKEA Family Mastercard residentes en Baleares y Canarias."
-    },
-    {
-      "id": 3,
-      "card": "ifmc",
-      "type": "cashback",
-      "geo": "baleares,canarias",
-      "title": "IKEA Family MC - CASH BACK",
-      "desc": "CASH BACK",
-      "text": "La tarjeta IKEA Family Mastercard es emitida por Santander Consumer Finance, S.A., y está sujeta a su aprobación. *X% CASHBACK en XXXXXXXXXX y X% CASHBACK en XXXXXXXXXXX del XX/XX/XXXX al XX/XX/XXXX. Promociones válidas para compras realizadas con tarjeta IKEA Family Mastercard y disponible exclusivamente en establecimientos asociados al programa. CASHBACK es un beneficio del programa IKEA Family, ofrecido por Ventajon S.A., según indican las condiciones generales en www.IKEAfamily.net/condiciones-generales-de-ikea-family (cláusula 4.1) del programa de fidelidad IKEA Family."
-    },
-    {
-      "id": 4,
-      "card": "ifmc",
-      "type": "bienvenida",
-      "geo": "baleares,canarias",
-      "title": "IKEA Family MC - Bienvenida",
-      "desc": "10% CASHBACK",
-      "text": "La tarjeta IKEA Family Mastercard es emitida por Santander Consumer Finance, S.A., y está sujeta a su aprobación. *10% CASHBACK en muebles y decoración o en www.islas.IKEA de IKEA Baleares y Canarias durante 5 días consecutivos desde fecha de alta de tarjeta IKEA Family Mastercard y aplicable a un importe máximo de 3.000€ (5% CASHBACK a partir del sexto día), 30% CASHBACK en Restaurante Sueco y Bistro Sueco de IKEA en la primera compra (10% CASHBACK a partir de la segunda compra) y 10% CASHBACK en Tienda Sueca de IKEA el primer día de compras (5% CASHBACK a partir del segundo día). No acumulable a financiación sin intereses ni otras ofertas. Oferta válida para tarjetas IKEA Family Mastercard dadas de alta entre el 01/01/2025 y el 31/12/2025. Consulta los establecimientos asociados en www.IKEAfamily.net/empresas-asociadas. CASHBACK es un beneficio del programa IKEA Family, ofrecido por Ventajon S.A., según indican las condiciones generales en www.IKEAfamily.net/condiciones-generales-de-ikea-family (cláusula 4.1) del programa de fidelidad IKEA Family."
-    },
-    {
-      "id": 5,
-      "card": "ifmc",
-      "type": "cumpleanos",
-      "geo": "baleares,canarias",
-      "title": "IKEA Family MC - Cumpleaños",
-      "desc": "10% CASHBACK",
-      "text": "La tarjeta IKEA Family Mastercard es emitida por Santander Consumer Finance, S.A., y está sujeta a su aprobación. *10% CASHBACK en IKEA Baleares y Canarias en muebles y decoración, Tienda Sueca y en www.islas.IKEA.es el día del cumpleaños, dos días antes y dos días después. Válido para compras realizadas mediante tarjeta IKEA Family Mastercard y aplicado a un importe máximo de 3.000€. No acumulable a financiación sin intereses ni otras ofertas. CASHBACK es un beneficio del programa IKEA Family, ofrecido por Ventajon S.A., según indican las condiciones generales en www.IKEAfamily.net/condiciones-generales-de-ikea-family (cláusula 4.1) del programa de fidelidad IKEA Family."
-    },
-    {
-      "id": 6,
-      "card": "ifmc",
-      "type": "cashback",
-      "geo": "baleares,canarias",
-      "title": "IKEA Family MC - CASH BACK",
-      "desc": "CASH BACK",
-      "text": "TEXTO LEGAL: La tarjeta IKEA Family Mastercard es emitida por Santander Consumer Finance, S.A., y está sujeta a su aprobación. * Comisión 3%, con un mínimo de 3€ a descontar del importe a transferir. Previa autorización por parte de Santander Consumer Finance, S.A."
-    },
-    {
-      "id": 7,
-      "card": "ifmc",
-      "type": "cashback",
-      "geo": "baleares,canarias",
-      "title": "IKEA Family MC - CASH BACK",
-      "desc": "CASH BACK",
-      "text": "TEXTO LEGAL: La tarjeta IKEA Family Mastercard es emitida por Santander Consumer Finance, S.A., y está sujeta a su aprobación. * Comisión 5%, con un mínimo de 3€ y el importe máximo diario a retirar es de 300€. Previa autorización por parte de Santander Consumer Finance, S.A."
-    },
-    {
-      "id": 8,
-      "card": "ifmc",
-      "type": "financiacion_sin",
-      "geo": "baleares,canarias",
-      "title": "IKEA Family MC - Financiación Sin Intereses",
-      "desc": "Financiación Sin Intereses",
-      "text": "*La tarjeta IKEA Family Mastercard es emitida por Santander Consumer Finance, S.A., y está sujeta a su aprobación. Importe mínimo de financiación 4.000€. Importe máximo de financiación 6.000 €. Ejemplo financiación de 4.000€. Ejemplo financiación en 48 meses de 4.032€. Importe de las 48 cuotas 84€. Precio total a plazos e importe adeudado 4.032€. Coste total del Cheque de compraédito e intereses 0€. T.I.N. 0%, T.A.E. 0%. Siendo el día de contratación 01/05/2025 y primer pago el 30/06/2025. Sistema de amortización francés. No acumulable a CASHBACK ni otras ofertas y válida para compras realizadas en Cocinas de IKEA Baleares y Canarias. Oferta válida desde el 01/05/2025 hasta 30/06/2025. Intereses subvencionados por IKEA."
-    },
-    {
-      "id": 9,
-      "card": "ifmc",
-      "type": "financiacion_sin",
-      "geo": "baleares,canarias",
-      "title": "IKEA Family MC - Financiación Sin Intereses",
-      "desc": "Financiación Sin Intereses",
-      "text": "*La tarjeta IKEA Family Mastercard es emitida por Santander Consumer Finance, S.A., y está sujeta a su aprobación. Financiación a 3, 6, 10, 12, 18, 24, 36 y 48 meses sin intereses para compras con importe mínimo de 120€, 240€, 400€, 600€, 1.200€, 2.400€, 3.000€ y 4.000€ respectivamente, y máximo de 6.000€. Ejemplo financiación en 12 meses de 720€. Importe de las 12 cuotas 60€. Precio total a plazos e importe adeudado 720€. Coste total del Cheque de compraédito e intereses 0€. T.I.N. 0%, T.A.E. 0%. Siendo el día de contratación 01/05/2025 y primer pago el 30/06/2025. Sistema de amortización francés. No acumulable a CASHBACK ni otras ofertas y válida para compras realizadas en Cocinas de IKEA Baleares y Canarias. Oferta válida desde 01/05/2025 hasta 30/06/2025. Intereses subvencionados por IKEA."
-    },
-    {
-      "id": 10,
-      "card": "ifmc",
-      "type": "financiacion_sin",
-      "geo": "baleares,canarias",
-      "title": "IKEA Family MC - Financiación Sin Intereses",
-      "desc": "Financiación Sin Intereses",
-      "text": "*La tarjeta IKEA Family Mastercard es emitida por Santander Consumer Finance, S.A., y está sujeta a su aprobación. Financiación a 3, 6, 10, 12, 18 y 24 meses sin intereses para compras con importe mínimo de 120€, 240€, 400€, 600€, 1.200€ y 2.400€ respectivamente, y máximo de 6.000€. Ejemplo financiación en 12 meses de 720€. Importe de las 12 cuotas 60€. Precio total a plazos e importe adeudado: 720€. Coste total del Cheque de compraédito e intereses 0€. T.I.N. 0%, T.A.E. 0%. Siendo el día de contratación 01/10/2025 y primer pago el 01/11/2025. Sistema de amortización francés. No acumulable a CASHBACK ni otras ofertas y válida para compras en IKEA Baleares y Canarias hasta 31/12/2025. Intereses subvencionados por IKEA."
-    },
-    {
-      "id": 11,
-      "card": "ifmc",
-      "type": "financiacion_sin",
-      "geo": "baleares,canarias",
-      "title": "IKEA Family MC - Financiación Sin Intereses",
-      "desc": "Financiación Sin Intereses",
-      "text": "*La tarjeta IKEA Family Mastercard es emitida por Santander Consumer Finance, S.A., y está sujeta a su aprobación. Financiación a 3, 6, 10 y 12 meses sin intereses para compras con importe mínimo de 150€ para 3 meses y 300€ para 6, 10 y 12 meses y hasta un máximo de 6.000€. Ejemplo financiación en 12 meses de 720€. Importe de las 12 cuotas 60€. Precio total a plazos e importe adeudado: 720€. Coste total del Cheque de compraédito e intereses 0€. T.I.N. 0%, T.A.E. 0%. Siendo el día de contratación 01/10/2025 y primer pago el 01/11/2025. Sistema de amortización francés. No acumulable a CASHBACK ni otras ofertas y válida para compras en IKEA Baleares y Canarias hasta 31/12/2025. Intereses subvencionados por IKEA."
-    },
-    {
-      "id": 12,
-      "card": "ifmc",
-      "type": "financiacion_sin",
-      "geo": "canarias",
-      "title": "IKEA Family MC - Financiación Sin Intereses",
-      "desc": "Financiación Sin Intereses",
-      "text": "*La tarjeta IKEA Family Mastercard es emitida por Santander Consumer Finance, S.A., y está sujeta a su aprobación. Financiación a 3 y 6 meses sin intereses para compras con importe mínimo de 60€ y 120€ respectivamente, y máximo de 6.000€. Ejemplo financiación en 6 meses de 120€. Importe de las 6 cuotas 20€. Precio total a plazos e importe adeudado: 120€. Coste total del Cheque de compraédito e intereses 0€. T.I.N. 0%, T.A.E. 0%. Siendo el día de contratación 01/10/2025 y primer pago el 01/11/2025. Sistema de amortización francés. No acumulable a CASHBACK ni otras ofertas y válida para compras realizadas en INSIDE LOGISTICS, S.L. de IKEA Tenerife, Punto de Entrega IKEA Tenerife Sur y Punto de Entrega IKEA La Palma. Oferta válida hasta 31/12/2025. Intereses subvencionados por INSIDE LOGISTICS, S.L."
-    },
-    {
-      "id": 13,
-      "card": "vjon",
-      "type": "financiacion_sin",
-      "geo": "canarias",
-      "title": "Ventajon Visa - Financiación Sin Intereses",
-      "desc": "Financiación Sin Intereses",
-      "text": "Publicidad *La tarjeta VENTAJON es emitida por la Entidad de Pago híbrida CaixaBank Payments & Consumer E.F.C., E.P., S.A.U., y está sujeta a su autorización. La entidad ha escogido como sistema de protección de los fondos recibidos de usuarios de servicios de pago que presta su depósito en una cuenta bancaria separada abierta en CaixaBank, S.A. T.I.N. 0% T.A.E. 0%. Financiación a 3 y 6 meses sin intereses para compras iguales o superiores a 90€ y 120€ respectivamente, y máximo de 3.000€. Ejemplo representativo para una compra financiada en 6 meses de 120€. Importe de las 6 cuotas 20€. Precio total a plazos e importe total adeudado: 120€. Coste total del Cheque de compraédito e intereses 0%. Sistema de amortización francés. No acumulable a CASHBACK ni otras ofertas y válida para compras realizadas en INSIDE LOGISTICS, S.L. de IKEA Tenerife, Punto de Entrega IKEA Tenerife Sur y Punto de Entrega IKEA La Palma. Oferta válida hasta 31/12/2025. Intereses subvencionados por INSIDE LOGISTICS, S.L."
     }
   ]
 }
