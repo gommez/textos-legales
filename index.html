@@ -531,7 +531,9 @@
         const docsToSave = docs.map(d => ({
             name: d.name,
             date: d.date,
-            type: d.type
+            type: d.type,
+            uploadedBy: d.uploadedBy || null,
+            uploadedAt: d.uploadedAt || null
         }));
         localStorage.setItem('legalTexts_docs', JSON.stringify(docsToSave));
     }
@@ -574,6 +576,9 @@
 
     // Inicializar al cargar
     document.addEventListener('DOMContentLoaded', async function() {
+        // Cargar sesión guardada
+        loadSession();
+        
         // Intentar cargar datos desde GitHub primero
         await loadRemoteData();
         
@@ -761,7 +766,42 @@
         'David': { pass: 'David', fullName: 'David Tavira' }
     };
     
+    const SESSION_DURATION = 10 * 60 * 1000; // 10 minutos en milisegundos
     let currentUser = null;
+    
+    // Cargar sesión guardada al inicio
+    function loadSession() {
+        const saved = localStorage.getItem('legalTexts_session');
+        if (saved) {
+            const session = JSON.parse(saved);
+            const now = Date.now();
+            if (now - session.timestamp < SESSION_DURATION) {
+                currentUser = { username: session.username, fullName: session.fullName };
+                // Renovar timestamp
+                saveSession();
+                return true;
+            } else {
+                // Sesión expirada
+                localStorage.removeItem('legalTexts_session');
+            }
+        }
+        return false;
+    }
+    
+    function saveSession() {
+        if (currentUser) {
+            localStorage.setItem('legalTexts_session', JSON.stringify({
+                username: currentUser.username,
+                fullName: currentUser.fullName,
+                timestamp: Date.now()
+            }));
+        }
+    }
+    
+    function clearSession() {
+        localStorage.removeItem('legalTexts_session');
+        currentUser = null;
+    }
     
     function showLoginModal() {
         document.getElementById('loginModal').classList.remove('hidden');
@@ -781,6 +821,7 @@
         
         if (USERS[user] && USERS[user].pass === pass) {
             currentUser = { username: user, fullName: USERS[user].fullName };
+            saveSession();
             closeLoginModal();
             toast('Bienvenido, ' + currentUser.fullName, 'success');
             goToDocuments();
@@ -791,7 +832,7 @@
     }
     
     function logoutDocs() {
-        currentUser = null;
+        clearSession();
         document.getElementById('loggedUserInfo').style.display = 'none';
         toast('Sesión cerrada', 'success');
         goHome();
