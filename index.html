@@ -640,43 +640,31 @@
     
     // Exportar datos para subir a GitHub
     function exportDataForGitHub() {
-        const hasPlazos = RULES.plazos_sin.ifmc.length > 0 || RULES.plazos_sin.vjon.length > 0 || RULES.plazos_con.ifmc.length > 0;
-        const hasCampanas = CAMPAIGNS.length > 0;
-        
-        if (!hasPlazos && !hasCampanas) {
-            toast('No hay datos para exportar. Procesa documentos primero.', 'warning');
-            return;
-        }
-        
         const today = new Date().toISOString().split('T')[0];
         
-        // Crear JSON de plazos
-        if (hasPlazos) {
-            const plazosData = {
-                version: "1.0",
-                updated: today,
-                sin_intereses: {
-                    ifmc: RULES.plazos_sin.ifmc,
-                    vjon: RULES.plazos_sin.vjon
-                },
-                con_intereses: {
-                    ifmc: RULES.plazos_con.ifmc
-                }
-            };
-            downloadJSON(plazosData, 'plazos.json');
-        }
+        // Crear JSON de plazos (siempre, aunque esté vacío)
+        const plazosData = {
+            version: "1.0",
+            updated: today,
+            sin_intereses: {
+                ifmc: RULES.plazos_sin.ifmc || [],
+                vjon: RULES.plazos_sin.vjon || []
+            },
+            con_intereses: {
+                ifmc: RULES.plazos_con.ifmc || []
+            }
+        };
+        downloadJSON(plazosData, 'plazos.json');
         
-        // Crear JSON de campañas
-        if (hasCampanas) {
-            const campanasData = {
-                version: "1.0",
-                updated: today,
-                campaigns: CAMPAIGNS
-            };
-            downloadJSON(campanasData, 'campanas.json');
-        }
+        // Crear JSON de campañas (siempre, aunque esté vacío)
+        const campanasData = {
+            version: "1.0",
+            updated: today,
+            campaigns: CAMPAIGNS || []
+        };
+        downloadJSON(campanasData, 'campanas.json');
         
-        toast('Archivos exportados. Súbelos a la carpeta /data/ en GitHub.', 'success');
+        toast('2 archivos exportados (plazos.json + campanas.json). Súbelos a /data/ en GitHub.', 'success');
     }
     
     // Descargar archivo JSON
