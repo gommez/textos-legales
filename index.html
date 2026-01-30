@@ -216,12 +216,10 @@
                             <label class="form-label">Programa / Tarjeta</label>
                             <select class="form-select" id="cardType" onchange="onCardChange()">
                                 <option value="">Selecciona...</option>
-                                <option value="ifmc">IKEA Family Mastercard</option>
-                                <option value="vjon">Ventajon Visa (Crédito)</option>
-                                <option value="tdv">Ventajon Débito</option>
-                                <option value="iff">IKEA Family Fidelidad</option>
-                                <option value="ifb">IKEA para tu negocio</option>
                             </select>
+                            <p id="noCardsMessage" class="no-data-message" style="display:none;color:var(--text-muted);font-size:0.85rem;margin-top:0.5rem;">
+                                ⚠️ No hay datos cargados. Ve a <strong>Documentos</strong> para subir y procesar archivos.
+                            </p>
                         </div>
                         <div class="form-group">
                             <label class="form-label">Ámbito geográfico <span class="form-hint">(varios)</span></label>
@@ -398,7 +396,8 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/mammoth/1.6.0/mammoth.browser.min.js"></script>
     <script>
     const RULES = {
-        promoTypes: {
+        // Tipos de promoción POSIBLES por tarjeta (estructura)
+        promoTypesPossible: {
             ifmc: ['cashback','bienvenida','cumpleanos','cashback_xtra','financiacion_sin','financiacion_con'],
             vjon: ['cashback','bienvenida','cumpleanos','cashback_xtra','financiacion_sin'],
             tdv: ['cashback','cashback_xtra'],
@@ -433,6 +432,44 @@
             ifmc: []
         }
     };
+    
+    // Función para obtener tipos de promoción DISPONIBLES según los datos cargados
+    function getAvailablePromoTypes(card) {
+        const possible = RULES.promoTypesPossible[card] || [];
+        const available = [];
+        
+        for (const type of possible) {
+            // Financiación sin intereses: solo si hay plazos cargados
+            if (type === 'financiacion_sin') {
+                if (RULES.plazos_sin[card] && RULES.plazos_sin[card].length > 0) {
+                    available.push(type);
+                }
+                continue;
+            }
+            
+            // Financiación con intereses: solo si hay plazos cargados
+            if (type === 'financiacion_con') {
+                if (RULES.plazos_con[card] && RULES.plazos_con[card].length > 0) {
+                    available.push(type);
+                }
+                continue;
+            }
+            
+            // Otros tipos: solo si hay campañas de ese tipo en la biblioteca
+            const hasCampaign = CAMPAIGNS.some(c => c.card === card && c.type === type);
+            if (hasCampaign) {
+                available.push(type);
+            }
+        }
+        
+        return available;
+    }
+    
+    // Función para obtener tarjetas disponibles (que tengan al menos un tipo de promoción)
+    function getAvailableCards() {
+        const allCards = ['ifmc', 'vjon', 'tdv', 'iff', 'ifb'];
+        return allCards.filter(card => getAvailablePromoTypes(card).length > 0);
+    }
 
     // NO hay campañas por defecto - todo viene de los documentos del usuario
     const DEFAULT_CAMPAIGNS = [];
@@ -677,7 +714,39 @@
         const today = new Date();
         document.getElementById('dateStart').value = today.toISOString().slice(0,10);
         document.getElementById('dateEnd').value = new Date(today.getFullYear(),11,31).toISOString().slice(0,10);
+        renderAvailableCards(); // Renderizar solo tarjetas con datos
         showStep(1);
+    }
+    
+    // Renderizar solo las tarjetas que tienen datos disponibles
+    function renderAvailableCards() {
+        const sel = document.getElementById('cardType');
+        const msg = document.getElementById('noCardsMessage');
+        const availableCards = getAvailableCards();
+        
+        sel.innerHTML = '<option value="">Selecciona...</option>';
+        
+        const cardLabels = {
+            ifmc: 'IKEA Family Mastercard',
+            vjon: 'Ventajon Visa (Crédito)',
+            tdv: 'Ventajon Débito',
+            iff: 'IKEA Family Fidelidad',
+            ifb: 'IKEA para tu negocio'
+        };
+        
+        availableCards.forEach(card => {
+            sel.innerHTML += '<option value="'+card+'">'+cardLabels[card]+'</option>';
+        });
+        
+        // Mostrar mensaje si no hay tarjetas disponibles
+        if (availableCards.length === 0) {
+            sel.innerHTML = '<option value="">No hay datos disponibles</option>';
+            sel.disabled = true;
+            if (msg) msg.style.display = 'block';
+        } else {
+            sel.disabled = false;
+            if (msg) msg.style.display = 'none';
+        }
     }
 
     function showStep(n) {
@@ -752,9 +821,15 @@
     function renderPromoTypes() {
         const sel = document.getElementById('promoType');
         sel.innerHTML = '<option value="">Selecciona...</option>';
-        (RULES.promoTypes[config.card]||[]).forEach(t => {
+        const availableTypes = getAvailablePromoTypes(config.card);
+        availableTypes.forEach(t => {
             sel.innerHTML += '<option value="'+t+'">'+RULES.promoNames[t]+'</option>';
         });
+        
+        // Si no hay tipos disponibles, mostrar mensaje
+        if (availableTypes.length === 0) {
+            sel.innerHTML = '<option value="">No hay promociones disponibles</option>';
+        }
     }
 
     function onPromoTypeChange() {
