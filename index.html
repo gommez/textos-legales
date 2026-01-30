@@ -1677,10 +1677,16 @@
         
         // Patrones para identificar textos legales completos
         const legalPatterns = [
-            { regex: /La tarjeta IKEA Family Mastercard es emitida por Santander/i, card: 'ifmc' },
-            { regex: /La tarjeta VENTAJON es emitida por.*CaixaBank/i, card: 'vjon' },
-            { regex: /La tarjeta VENTAJON Visa es emitida/i, card: 'vjon' },
-            { regex: /La tarjeta débito VENTAJON es emitida por PECUNIA/i, card: 'tdv' }
+            { regex: /IKEA Family Mastercard.*Santander/i, card: 'ifmc' },
+            { regex: /tarjeta IKEA Family/i, card: 'ifmc' },
+            { regex: /IKEA Family Mastercard/i, card: 'ifmc' },
+            { regex: /Santander Consumer Finance/i, card: 'ifmc' },
+            { regex: /VENTAJON.*CaixaBank/i, card: 'vjon' },
+            { regex: /tarjeta VENTAJON Visa/i, card: 'vjon' },
+            { regex: /VENTAJON Visa/i, card: 'vjon' },
+            { regex: /CaixaBank Payments/i, card: 'vjon' },
+            { regex: /débito VENTAJON.*PECUNIA/i, card: 'tdv' },
+            { regex: /PECUNIA CARDS/i, card: 'tdv' }
         ];
         
         // Patrones para detectar tipo de promoción
