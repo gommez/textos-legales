@@ -137,10 +137,19 @@
         .docs-layout { display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; }
         .docs-panel { background: var(--bg-card); border-radius: var(--radius-lg); box-shadow: var(--shadow-md); padding: 1.25rem; }
         .docs-title { font-weight: 600; margin-bottom: 1rem; display: flex; align-items: center; gap: 0.5rem; }
-        .upload-area { border: 2px dashed var(--border-color); border-radius: var(--radius-md); padding: 1.5rem; text-align: center; cursor: pointer; background: var(--bg-light); }
+        .upload-area { border: 2px dashed var(--border-color); border-radius: var(--radius-md); padding: 1.5rem; text-align: center; cursor: pointer; background: var(--bg-light); transition: all 0.2s; }
         .upload-area:hover { border-color: var(--ikea-blue); }
+        .upload-area.has-files { border-color: var(--success); background: #E8F5E9; }
         .upload-area p { font-size: 0.85rem; color: var(--text-secondary); }
         .upload-area span { color: var(--ikea-blue); font-weight: 500; }
+        .pending-files { font-size: 0.8rem; }
+        .pending-file { display: flex; align-items: center; gap: 0.5rem; padding: 0.4rem 0.6rem; background: var(--bg-light); border-radius: var(--radius-sm); margin-bottom: 0.3rem; }
+        .pending-file-icon { font-size: 0.7rem; font-weight: bold; padding: 0.2rem 0.4rem; border-radius: 3px; }
+        .pending-file-icon.xlsx { background: #E8F5E9; color: #2E7D32; }
+        .pending-file-icon.docx { background: #E3F2FD; color: #1565C0; }
+        .pending-file-name { flex: 1; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+        .pending-file-remove { cursor: pointer; color: var(--text-muted); padding: 0.2rem; }
+        .pending-file-remove:hover { color: #c62828; }
         .doc-list { margin-top: 1rem; }
         .doc-item { display: flex; align-items: center; padding: 0.6rem; background: var(--bg-light); border-radius: var(--radius-sm); margin-bottom: 0.4rem; gap: 0.6rem; }
         .doc-icon { width: 32px; height: 32px; background: white; border-radius: var(--radius-sm); display: flex; align-items: center; justify-content: center; font-size: 0.7rem; font-weight: bold; }
@@ -363,11 +372,12 @@
             <div class="docs-layout">
                 <div class="docs-panel">
                     <h3 class="docs-title">📤 Subir documentos</h3>
-                    <div class="upload-area" onclick="document.getElementById('fileInput').click()">
+                    <div class="upload-area" id="uploadArea" onclick="document.getElementById('fileInput').click()">
                         <p>Arrastra o <span>haz clic</span> para subir</p>
                         <p style="font-size:0.75rem;color:var(--text-muted);margin-top:0.5rem;">Excel (.xlsx) o Word (.docx)</p>
                         <input type="file" id="fileInput" style="display:none;" multiple accept=".xlsx,.xls,.docx,.doc" onchange="uploadFiles(event)">
                     </div>
+                    <div id="pendingFilesList" style="display:none;margin-top:0.75rem;"></div>
                     <button class="btn btn-primary btn-update" onclick="processAllDocs()">🔄 Procesar y actualizar datos</button>
                     <div style="margin-top:1rem;padding:0.75rem;background:#E3F2FD;border-radius:var(--radius-sm);font-size:0.8rem;color:#1565C0;">
                         💡 <strong>Parser inteligente</strong><br>
@@ -1194,28 +1204,74 @@
         }).join('');
     }
 
+    // Lista temporal de archivos pendientes de procesar
+    let pendingFiles = [];
+    
     function uploadFiles(e) {
         const files = e.target.files;
+        let added = 0;
+        
         for (let f of files) {
             const ext = f.name.split('.').pop().toLowerCase();
-            if (!docs.find(d => d.name === f.name)) {
-                // Guardar el archivo real para procesarlo después
-                const reader = new FileReader();
-                reader.onload = function(event) {
-                    docs.unshift({
-                        name: f.name, 
-                        date: new Date().toLocaleDateString('es-ES'), 
-                        type: ext,
-                        data: event.target.result // ArrayBuffer del archivo
-                    });
-                    saveDocs();
-                    renderDocs();
-                };
-                reader.readAsArrayBuffer(f);
+            // Evitar duplicados en pendientes y en docs ya cargados
+            if (!pendingFiles.find(p => p.name === f.name) && !docs.find(d => d.name === f.name)) {
+                pendingFiles.push({
+                    name: f.name,
+                    type: ext,
+                    file: f
+                });
+                added++;
             }
         }
-        toast(files.length + ' documento(s) añadido(s)','success');
+        
+        if (added > 0) {
+            renderPendingFiles();
+            toast(added + ' archivo(s) añadido(s)', 'success');
+        }
         e.target.value = '';
+    }
+    
+    function renderPendingFiles() {
+        const container = document.getElementById('pendingFilesList');
+        const uploadArea = document.getElementById('uploadArea');
+        
+        if (pendingFiles.length === 0) {
+            container.style.display = 'none';
+            uploadArea.classList.remove('has-files');
+            return;
+        }
+        
+        uploadArea.classList.add('has-files');
+        container.style.display = 'block';
+        
+        let html = '<div class="pending-files"><strong style="font-size:0.75rem;color:var(--text-muted);">Archivos seleccionados:</strong>';
+        pendingFiles.forEach((f, i) => {
+            const iconClass = f.type === 'xlsx' || f.type === 'xls' ? 'xlsx' : 'docx';
+            const iconText = f.type === 'xlsx' || f.type === 'xls' ? 'XLS' : 'DOC';
+            html += '<div class="pending-file">';
+            html += '<span class="pending-file-icon ' + iconClass + '">' + iconText + '</span>';
+            html += '<span class="pending-file-name">' + f.name + '</span>';
+            html += '<span class="pending-file-remove" onclick="removePendingFile(' + i + ')" title="Quitar">✕</span>';
+            html += '</div>';
+        });
+        html += '</div>';
+        
+        container.innerHTML = html;
+    }
+    
+    function removePendingFile(index) {
+        pendingFiles.splice(index, 1);
+        renderPendingFiles();
+    }
+    
+    // Helper para leer archivo como ArrayBuffer
+    function readFileAsArrayBuffer(file) {
+        return new Promise((resolve, reject) => {
+            const reader = new FileReader();
+            reader.onload = e => resolve(e.target.result);
+            reader.onerror = e => reject(e);
+            reader.readAsArrayBuffer(file);
+        });
     }
 
     function removeDoc(i) { 
@@ -1262,6 +1318,27 @@
     async function processAllDocs() {
         clearLog();
         logProcess('Iniciando procesamiento de documentos...', 'info');
+        
+        // Primero, cargar los archivos pendientes a docs
+        if (pendingFiles.length > 0) {
+            logProcess('📂 Cargando ' + pendingFiles.length + ' archivo(s)...', 'info');
+            
+            for (const pending of pendingFiles) {
+                const data = await readFileAsArrayBuffer(pending.file);
+                docs.unshift({
+                    name: pending.name,
+                    date: new Date().toLocaleDateString('es-ES'),
+                    type: pending.type,
+                    data: data
+                });
+            }
+            
+            // Limpiar pendientes
+            pendingFiles = [];
+            renderPendingFiles();
+            saveDocs();
+            renderDocs();
+        }
         
         // Filtrar documentos con datos
         const xlsxDocs = docs.filter(d => (d.type === 'xlsx' || d.type === 'xls') && d.data);
