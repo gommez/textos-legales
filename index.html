@@ -1,0 +1,1843 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Generador de Textos Legales | IKEA Family & Ventajon</title>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root { --ikea-blue: #0058A3; --ikea-yellow: #FFDB00; --bg-light: #F5F5F5; --bg-card: #FFFFFF; --text-primary: #111; --text-secondary: #555; --text-muted: #888; --border-color: #E0E0E0; --success: #00A65A; --warning: #FFA000; --shadow-sm: 0 1px 3px rgba(0,0,0,0.08); --shadow-md: 0 4px 12px rgba(0,0,0,0.1); --radius-sm: 6px; --radius-md: 12px; --radius-lg: 20px; }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Noto Sans', sans-serif; background: var(--bg-light); color: var(--text-primary); line-height: 1.6; }
+        .header { background: linear-gradient(135deg, var(--ikea-blue), #003D73); color: white; padding: 1rem 2rem; position: sticky; top: 0; z-index: 100; box-shadow: var(--shadow-md); }
+        .header-content { max-width: 1400px; margin: 0 auto; display: flex; justify-content: space-between; align-items: center; }
+        .logo-section { display: flex; align-items: center; gap: 1rem; cursor: pointer; }
+        .logo-icon { width: 44px; height: 44px; background: var(--ikea-yellow); border-radius: var(--radius-sm); display: flex; align-items: center; justify-content: center; font-weight: 700; color: var(--ikea-blue); }
+        .logo-text h1 { font-size: 1.2rem; font-weight: 600; }
+        .logo-text span { font-size: 0.8rem; opacity: 0.85; }
+        .header-actions { display: flex; gap: 0.75rem; }
+        .btn { padding: 0.5rem 1rem; border-radius: var(--radius-sm); font-weight: 500; cursor: pointer; border: none; font-size: 0.85rem; display: flex; align-items: center; gap: 0.5rem; transition: all 0.2s; }
+        .btn-primary { background: var(--ikea-yellow); color: var(--ikea-blue); }
+        .btn-primary:hover { background: #FFE333; }
+        .btn-secondary { background: rgba(255,255,255,0.15); color: white; border: 1px solid rgba(255,255,255,0.3); }
+        .btn-outline { background: transparent; color: var(--ikea-blue); border: 2px solid var(--ikea-blue); }
+        .btn-outline:hover { background: var(--ikea-blue); color: white; }
+        .main-container { max-width: 1400px; margin: 0 auto; padding: 1.5rem; }
+        .screen { display: none; }
+        .screen.active { display: block; }
+        .home-screen.active { display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 60vh; text-align: center; }
+        .home-title { font-size: 2rem; font-weight: 700; margin-bottom: 0.5rem; }
+        .home-subtitle { color: var(--text-secondary); margin-bottom: 2rem; }
+        .home-options { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.5rem; max-width: 900px; }
+        .home-card { background: var(--bg-card); border-radius: var(--radius-lg); padding: 2rem; box-shadow: var(--shadow-md); cursor: pointer; border: 2px solid transparent; transition: all 0.3s; text-align: center; }
+        .home-card:hover { transform: translateY(-3px); border-color: var(--ikea-blue); }
+        .home-card.disabled { opacity: 0.5; cursor: not-allowed; }
+        .home-card.disabled:hover { transform: none; border-color: transparent; }
+        .home-card-icon { width: 70px; height: 70px; background: linear-gradient(135deg, var(--ikea-blue), #003D73); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 1rem; }
+        .home-card-icon svg { width: 32px; height: 32px; stroke: white; fill: none; stroke-width: 2; }
+        .home-card-title { font-weight: 600; margin-bottom: 0.5rem; }
+        .home-card-desc { font-size: 0.85rem; color: var(--text-secondary); }
+        .coming-soon { background: var(--warning); color: white; font-size: 0.65rem; padding: 0.2rem 0.5rem; border-radius: 10px; margin-top: 0.5rem; display: inline-block; }
+        .screen-header { display: flex; align-items: center; gap: 1rem; margin-bottom: 1.5rem; }
+        .back-btn { width: 36px; height: 36px; border-radius: 50%; background: var(--bg-card); border: 1px solid var(--border-color); display: flex; align-items: center; justify-content: center; cursor: pointer; }
+        .back-btn:hover { background: var(--ikea-blue); color: white; border-color: var(--ikea-blue); }
+        .screen-title { font-size: 1.3rem; font-weight: 600; }
+        .creator-layout { display: grid; grid-template-columns: 360px 1fr; gap: 1.5rem; }
+        .sidebar { background: var(--bg-card); border-radius: var(--radius-lg); box-shadow: var(--shadow-md); padding: 1.25rem; height: fit-content; position: sticky; top: 90px; }
+        .sidebar-title { font-weight: 600; margin-bottom: 1rem; display: flex; align-items: center; gap: 0.5rem; }
+        .step-indicator { display: flex; justify-content: space-between; margin-bottom: 1.5rem; position: relative; }
+        .step-indicator::before { content: ''; position: absolute; top: 50%; left: 0; right: 0; height: 2px; background: var(--border-color); transform: translateY(-50%); }
+        .step { width: 32px; height: 32px; border-radius: 50%; background: var(--bg-light); border: 2px solid var(--border-color); display: flex; align-items: center; justify-content: center; font-weight: 600; font-size: 0.85rem; color: var(--text-muted); position: relative; z-index: 1; cursor: pointer; transition: all 0.2s; }
+        .step:hover { transform: scale(1.1); }
+        .step.active { background: var(--ikea-blue); border-color: var(--ikea-blue); color: white; }
+        .step.completed { background: var(--success); border-color: var(--success); color: white; }
+        .form-group { margin-bottom: 1.25rem; }
+        .form-label { display: block; font-weight: 500; margin-bottom: 0.4rem; font-size: 0.85rem; color: var(--text-secondary); }
+        .form-hint { font-weight: 400; color: var(--text-muted); font-size: 0.75rem; }
+        .form-select, .form-input { width: 100%; padding: 0.7rem; border: 1px solid var(--border-color); border-radius: var(--radius-sm); font-size: 0.9rem; font-family: inherit; background: var(--bg-light); }
+        .form-select:focus, .form-input:focus { outline: none; border-color: var(--ikea-blue); box-shadow: 0 0 0 3px rgba(0,88,163,0.1); }
+        .option-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 0.4rem; }
+        .option-card { padding: 0.6rem; border: 2px solid var(--border-color); border-radius: var(--radius-sm); cursor: pointer; text-align: center; font-size: 0.8rem; background: var(--bg-light); position: relative; transition: all 0.2s; }
+        .option-card:hover:not(.disabled) { border-color: var(--ikea-blue); background: white; }
+        .option-card.selected { border-color: var(--ikea-blue); background: rgba(0,88,163,0.08); }
+        .option-card.selected::after { content: '✓'; position: absolute; top: 2px; right: 4px; font-size: 0.6rem; color: var(--ikea-blue); font-weight: bold; }
+        .option-card.disabled { opacity: 0.4; cursor: not-allowed; }
+        .option-card .option-icon { font-size: 1rem; }
+        .option-card .option-label { font-size: 0.7rem; }
+        .channel-grid .option-card.full-width { grid-column: span 2; }
+        .pct-wrapper { position: relative; }
+        .pct-wrapper input { font-size: 1.2rem; font-weight: 600; text-align: center; padding-right: 2rem; }
+        .pct-wrapper .suffix { position: absolute; right: 0.8rem; top: 50%; transform: translateY(-50%); font-size: 1rem; color: var(--text-muted); }
+        .eas-row { display: grid; grid-template-columns: 1fr 70px 28px; gap: 0.4rem; margin-bottom: 0.4rem; align-items: center; }
+        .eas-row input { font-size: 0.85rem; padding: 0.5rem; }
+        .btn-remove { width: 28px; height: 28px; border: 1px solid #ffcdd2; background: #ffebee; color: #c62828; border-radius: var(--radius-sm); cursor: pointer; font-size: 1rem; }
+        .btn-add { width: 100%; margin-top: 0.4rem; justify-content: center; background: var(--bg-light); color: var(--ikea-blue); border: 1px dashed var(--ikea-blue); font-size: 0.8rem; padding: 0.4rem; }
+        .checkbox-group { display: flex; flex-direction: column; gap: 0.4rem; }
+        .checkbox-item { display: flex; align-items: center; gap: 0.5rem; padding: 0.5rem; background: var(--bg-light); border-radius: var(--radius-sm); font-size: 0.8rem; }
+        .checkbox-item input { accent-color: var(--ikea-blue); }
+        .checkbox-item.locked { opacity: 0.7; background: #f5f5f5; }
+        .date-range { display: grid; grid-template-columns: 1fr 1fr; gap: 0.4rem; }
+        .date-range input { padding: 0.5rem; font-size: 0.85rem; border: 1px solid var(--border-color); border-radius: var(--radius-sm); }
+        .step-nav { display: flex; gap: 0.5rem; margin-top: 1rem; }
+        .step-nav .btn { flex: 1; justify-content: center; }
+        .content-area { display: flex; flex-direction: column; gap: 1rem; }
+        .info-cards { display: grid; grid-template-columns: repeat(3, 1fr); gap: 0.75rem; }
+        .info-card { background: var(--bg-card); border-radius: var(--radius-md); padding: 1rem; box-shadow: var(--shadow-sm); border-left: 4px solid var(--ikea-blue); }
+        .info-card.warning { border-left-color: var(--warning); }
+        .info-card.success { border-left-color: var(--success); }
+        .info-card-title { font-size: 0.7rem; color: var(--text-muted); text-transform: uppercase; margin-bottom: 0.2rem; }
+        .info-card-value { font-size: 0.9rem; font-weight: 600; }
+        .preview-card { background: var(--bg-card); border-radius: var(--radius-lg); box-shadow: var(--shadow-md); overflow: hidden; }
+        .preview-header { background: linear-gradient(135deg, #F8F9FA, #EBEEF2); padding: 1rem; border-bottom: 1px solid var(--border-color); display: flex; justify-content: space-between; align-items: center; }
+        .preview-title { font-weight: 600; font-size: 0.9rem; }
+        .preview-actions { display: flex; gap: 0.4rem; }
+        .btn-icon { width: 30px; height: 30px; border-radius: var(--radius-sm); border: 1px solid var(--border-color); background: white; cursor: pointer; display: flex; align-items: center; justify-content: center; font-size: 0.9rem; }
+        .btn-icon:hover { background: var(--bg-light); }
+        .preview-body { padding: 1rem; }
+        .legal-output { background: #FAFBFC; border: 1px solid var(--border-color); border-radius: var(--radius-md); padding: 1rem; font-size: 0.85rem; line-height: 1.7; min-height: 120px; white-space: pre-wrap; }
+        .placeholder { color: var(--text-muted); font-style: italic; text-align: center; padding: 2rem; }
+        .library-layout { display: grid; grid-template-columns: 240px 1fr; gap: 1.5rem; }
+        .library-filters { background: var(--bg-card); border-radius: var(--radius-lg); box-shadow: var(--shadow-md); padding: 1rem; height: fit-content; position: sticky; top: 90px; }
+        .filters-title { font-weight: 600; margin-bottom: 1rem; font-size: 0.95rem; }
+        .filter-group { margin-bottom: 1rem; }
+        .filter-group-title { font-size: 0.7rem; text-transform: uppercase; color: var(--text-muted); margin-bottom: 0.4rem; padding-left: 0.4rem; }
+        .filter-btn { width: 100%; display: flex; align-items: center; gap: 0.5rem; padding: 0.5rem; border: none; background: transparent; border-radius: var(--radius-sm); cursor: pointer; font-size: 0.8rem; color: var(--text-secondary); text-align: left; }
+        .filter-btn:hover { background: var(--bg-light); }
+        .filter-btn.active { background: rgba(0,88,163,0.1); color: var(--ikea-blue); font-weight: 500; }
+        .library-content { display: flex; flex-direction: column; gap: 1rem; }
+        .library-header { display: flex; justify-content: space-between; align-items: center; }
+        .library-search { display: flex; align-items: center; gap: 0.5rem; background: var(--bg-card); border: 1px solid var(--border-color); border-radius: var(--radius-md); padding: 0.5rem 0.75rem; width: 250px; }
+        .library-search input { border: none; background: transparent; outline: none; font-size: 0.85rem; width: 100%; }
+        .library-count { font-size: 0.8rem; color: var(--text-muted); }
+        .campaigns-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 1rem; }
+        .campaign-card { background: var(--bg-card); border-radius: var(--radius-md); box-shadow: var(--shadow-sm); overflow: hidden; cursor: pointer; border: 2px solid transparent; transition: all 0.2s; }
+        .campaign-card:hover { border-color: var(--ikea-blue); }
+        .campaign-header { padding: 0.6rem 0.8rem; border-bottom: 1px solid var(--border-color); display: flex; justify-content: space-between; align-items: flex-start; }
+        .campaign-badges { display: flex; gap: 0.3rem; flex-wrap: wrap; }
+        .badge { padding: 0.15rem 0.4rem; border-radius: 3px; font-size: 0.6rem; font-weight: 600; text-transform: uppercase; }
+        .badge-ifmc { background: #E3F2FD; color: #1565C0; }
+        .badge-vjon { background: #FFF3E0; color: #E65100; }
+        .badge-tdv { background: #FCE4EC; color: #C2185B; }
+        .badge-iff { background: #E8F5E9; color: #2E7D32; }
+        .badge-ifb { background: #F3E5F5; color: #7B1FA2; }
+        .badge-cashback { background: #FFF9C4; color: #F57F17; }
+        .badge-bienvenida { background: #B2EBF2; color: #00838F; }
+        .badge-cumpleanos { background: #F8BBD9; color: #AD1457; }
+        .badge-financiacion { background: #E0E0E0; color: #424242; }
+        .badge-financiacion_sin { background: #C8E6C9; color: #2E7D32; }
+        .badge-financiacion_con { background: #FFCCBC; color: #BF360C; }
+        .badge-cheque { background: #DCEDC8; color: #558B2F; }
+        .badge-cashback_xtra { background: #FFE0B2; color: #E65100; }
+        .campaign-geo { font-size: 0.7rem; color: var(--text-muted); }
+        .campaign-body { padding: 0.8rem; }
+        .campaign-title { font-size: 0.9rem; font-weight: 600; margin-bottom: 0.3rem; }
+        .campaign-desc { font-size: 0.75rem; color: var(--text-secondary); line-height: 1.4; }
+        .campaign-footer { padding: 0.5rem 0.8rem; background: var(--bg-light); display: flex; justify-content: flex-end; }
+        .btn-use { padding: 0.3rem 0.6rem; background: var(--ikea-blue); color: white; border: none; border-radius: var(--radius-sm); font-size: 0.75rem; cursor: pointer; }
+        .docs-layout { display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; }
+        .docs-panel { background: var(--bg-card); border-radius: var(--radius-lg); box-shadow: var(--shadow-md); padding: 1.25rem; }
+        .docs-title { font-weight: 600; margin-bottom: 1rem; display: flex; align-items: center; gap: 0.5rem; }
+        .upload-area { border: 2px dashed var(--border-color); border-radius: var(--radius-md); padding: 1.5rem; text-align: center; cursor: pointer; background: var(--bg-light); }
+        .upload-area:hover { border-color: var(--ikea-blue); }
+        .upload-area p { font-size: 0.85rem; color: var(--text-secondary); }
+        .upload-area span { color: var(--ikea-blue); font-weight: 500; }
+        .doc-list { margin-top: 1rem; }
+        .doc-item { display: flex; align-items: center; padding: 0.6rem; background: var(--bg-light); border-radius: var(--radius-sm); margin-bottom: 0.4rem; gap: 0.6rem; }
+        .doc-icon { width: 32px; height: 32px; background: white; border-radius: var(--radius-sm); display: flex; align-items: center; justify-content: center; font-size: 0.7rem; font-weight: bold; }
+        .doc-icon.xlsx { background: #E8F5E9; color: #2E7D32; }
+        .doc-icon.docx { background: #E3F2FD; color: #1565C0; }
+        .doc-info { flex: 1; }
+        .doc-name { font-size: 0.8rem; font-weight: 500; }
+        .doc-meta { font-size: 0.7rem; color: var(--text-muted); }
+        .doc-actions { display: flex; gap: 0.3rem; }
+        .btn-doc { width: 26px; height: 26px; border: 1px solid var(--border-color); background: white; border-radius: var(--radius-sm); cursor: pointer; font-size: 0.75rem; }
+        .btn-doc.delete { color: #c62828; border-color: #ffcdd2; }
+        .btn-update { margin-top: 1rem; width: 100%; justify-content: center; }
+        .process-log { margin-top: 1rem; background: #1a1a2e; border-radius: var(--radius-md); padding: 1rem; font-family: 'Courier New', monospace; font-size: 0.75rem; max-height: 300px; overflow-y: auto; }
+        .log-line { padding: 0.2rem 0; border-bottom: 1px solid #2a2a4e; }
+        .log-line.info { color: #64B5F6; }
+        .log-line.success { color: #81C784; }
+        .log-line.warning { color: #FFD54F; }
+        .log-line.error { color: #E57373; }
+        .log-line.data { color: #CE93D8; }
+        .extracted-data { margin-top: 1rem; background: var(--bg-light); border-radius: var(--radius-md); padding: 1rem; }
+        .extracted-title { font-weight: 600; margin-bottom: 0.5rem; display: flex; align-items: center; gap: 0.5rem; }
+        .extracted-table { width: 100%; border-collapse: collapse; font-size: 0.75rem; margin-top: 0.5rem; }
+        .extracted-table th, .extracted-table td { padding: 0.4rem; border: 1px solid var(--border-color); text-align: left; }
+        .extracted-table th { background: var(--ikea-blue); color: white; }
+        .extracted-table tr:nth-child(even) { background: #f9f9f9; }
+        .data-source-badge { display: inline-block; padding: 0.15rem 0.4rem; border-radius: 3px; font-size: 0.65rem; font-weight: 600; margin-left: 0.5rem; }
+        .data-source-badge.excel { background: #C8E6C9; color: #2E7D32; }
+        .data-source-badge.default { background: #E0E0E0; color: #616161; }
+        .toast-container { position: fixed; bottom: 1rem; right: 1rem; z-index: 1000; }
+        .toast { background: var(--text-primary); color: white; padding: 0.75rem 1rem; border-radius: var(--radius-md); margin-top: 0.5rem; font-size: 0.85rem; animation: slideIn 0.3s; }
+        .toast.success { background: var(--success); }
+        @keyframes slideIn { from { transform: translateX(100%); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
+        @media (max-width: 1100px) { .creator-layout, .library-layout, .docs-layout { grid-template-columns: 1fr; } .sidebar, .library-filters { position: static; } .info-cards { grid-template-columns: 1fr; } .home-options { grid-template-columns: 1fr; max-width: 320px; } }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <div class="header-content">
+            <div class="logo-section" onclick="goHome()">
+                <div class="logo-icon">TL</div>
+                <div class="logo-text"><h1>Textos Legales</h1><span>IKEA Family & Ventajon</span></div>
+            </div>
+            <div class="header-actions">
+                <button class="btn btn-secondary" onclick="goToDocuments()">📁 Documentos</button>
+                <button class="btn btn-primary" onclick="exportText()" id="exportBtn" style="display:none;">⬇️ Exportar</button>
+            </div>
+        </div>
+    </header>
+    <main class="main-container">
+        <div class="screen home-screen active" id="homeScreen">
+            <h1 class="home-title">¿Qué necesitas hacer?</h1>
+            <p class="home-subtitle">Selecciona una opción</p>
+            <div class="home-options" id="homeOptions">
+                <!-- Se renderiza dinámicamente -->
+            </div>
+        </div>
+        <div class="screen" id="creatorScreen">
+            <div class="screen-header">
+                <button class="back-btn" onclick="goHome()">←</button>
+                <h2 class="screen-title">Crear nueva promoción</h2>
+            </div>
+            <div class="creator-layout">
+                <aside class="sidebar">
+                    <h2 class="sidebar-title">⚙️ Configurador</h2>
+                    <div class="step-indicator">
+                        <div class="step active" onclick="goToStep(1)">1</div>
+                        <div class="step" onclick="goToStep(2)">2</div>
+                        <div class="step" onclick="goToStep(3)">3</div>
+                        <div class="step" onclick="goToStep(4)">4</div>
+                    </div>
+                    <div class="step-content" id="step1">
+                        <div class="form-group">
+                            <label class="form-label">Programa / Tarjeta</label>
+                            <select class="form-select" id="cardType" onchange="onCardChange()">
+                                <option value="">Selecciona...</option>
+                                <option value="ifmc">IKEA Family Mastercard</option>
+                                <option value="vjon">Ventajon Visa (Crédito)</option>
+                                <option value="tdv">Ventajon Débito</option>
+                                <option value="iff">IKEA Family Fidelidad</option>
+                                <option value="ifb">IKEA para tu negocio</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Ámbito geográfico <span class="form-hint">(varios)</span></label>
+                            <div class="option-grid" id="geoGrid">
+                                <div class="option-card" data-geo="baleares" onclick="toggleGeo(this)"><div class="option-icon">🏝️</div><div class="option-label">Baleares</div></div>
+                                <div class="option-card" data-geo="canarias" onclick="toggleGeo(this)"><div class="option-icon">🌴</div><div class="option-label">Canarias</div></div>
+                                <div class="option-card" data-geo="peninsula" onclick="toggleGeo(this)"><div class="option-icon">🏔️</div><div class="option-label">Península</div></div>
+                                <div class="option-card" data-geo="nacional" onclick="toggleGeo(this)"><div class="option-icon">🇪🇸</div><div class="option-label">Nacional</div></div>
+                            </div>
+                        </div>
+                        <div class="step-nav"><button class="btn btn-primary" onclick="nextStep()">Siguiente →</button></div>
+                    </div>
+                    <div class="step-content" id="step2" style="display:none;">
+                        <div class="form-group">
+                            <label class="form-label">Tipo de promoción</label>
+                            <select class="form-select" id="promoType" onchange="onPromoTypeChange()"></select>
+                        </div>
+                        <div class="form-group" id="channelGroup">
+                            <label class="form-label">Canal <span class="form-hint">(varios)</span></label>
+                            <div class="option-grid channel-grid" id="channelGrid"></div>
+                        </div>
+                        <div class="step-nav">
+                            <button class="btn btn-outline" onclick="prevStep()">← Anterior</button>
+                            <button class="btn btn-primary" onclick="nextStep()">Siguiente →</button>
+                        </div>
+                    </div>
+                    <div class="step-content" id="step3" style="display:none;">
+                        <div class="form-group" id="pctGroup" style="display:none;">
+                            <label class="form-label">Porcentaje</label>
+                            <div class="pct-wrapper">
+                                <input type="number" class="form-input" id="mainPct" placeholder="10" min="1" max="100">
+                                <span class="suffix">%</span>
+                            </div>
+                        </div>
+                        <div class="form-group" id="easGroup" style="display:none;">
+                            <label class="form-label">Empresas y descuentos</label>
+                            <div id="easList"></div>
+                            <button class="btn btn-add" onclick="addEas()">+ Añadir empresa</button>
+                        </div>
+                        <div class="form-group" id="maxGroup" style="display:none;">
+                            <label class="form-label">Importe máximo</label>
+                            <select class="form-select" id="maxAmount">
+                                <option value="3000">3.000€</option>
+                                <option value="6000" selected>6.000€</option>
+                            </select>
+                        </div>
+                        <div class="form-group" id="plazosGroup" style="display:none;">
+                            <label class="form-label">Plazos disponibles</label>
+                            <div class="checkbox-group" id="plazosList"></div>
+                        </div>
+                        <div class="form-group" id="fixedInfo" style="display:none;">
+                            <div style="background:var(--bg-light);padding:1rem;border-radius:var(--radius-sm);font-size:0.85rem;">
+                                <strong>ℹ️ Promoción con valores fijos</strong><br>
+                                <span id="fixedInfoText">Esta campaña tiene condiciones predefinidas.</span>
+                            </div>
+                        </div>
+                        <div class="step-nav">
+                            <button class="btn btn-outline" onclick="prevStep()">← Anterior</button>
+                            <button class="btn btn-primary" onclick="nextStep()">Siguiente →</button>
+                        </div>
+                    </div>
+                    <div class="step-content" id="step4" style="display:none;">
+                        <div class="form-group">
+                            <label class="form-label">Vigencia</label>
+                            <div class="date-range">
+                                <input type="date" id="dateStart">
+                                <input type="date" id="dateEnd">
+                            </div>
+                        </div>
+                        <div class="form-group" id="conditionsGroup">
+                            <label class="form-label">Condiciones</label>
+                            <div class="checkbox-group" id="conditionsList"></div>
+                        </div>
+                        <div class="step-nav">
+                            <button class="btn btn-outline" onclick="prevStep()">← Anterior</button>
+                            <button class="btn btn-primary" onclick="generateText()">⚡ Generar</button>
+                        </div>
+                    </div>
+                </aside>
+                <div class="content-area">
+                    <div class="info-cards">
+                        <div class="info-card"><div class="info-card-title">Programa</div><div class="info-card-value" id="infoCard">-</div></div>
+                        <div class="info-card warning"><div class="info-card-title">Vigencia</div><div class="info-card-value" id="infoVigencia">-</div></div>
+                        <div class="info-card success"><div class="info-card-title">Estado</div><div class="info-card-value" id="infoEstado">Configurando...</div></div>
+                    </div>
+                    <div class="preview-card">
+                        <div class="preview-header">
+                            <div class="preview-title">📄 Texto Legal</div>
+                            <div class="preview-actions">
+                                <button class="btn-icon" onclick="copyText()" title="Copiar">📋</button>
+                                <button class="btn-icon" onclick="editText()" title="Editar">✏️</button>
+                            </div>
+                        </div>
+                        <div class="preview-body">
+                            <div class="legal-output" id="legalOutput"><div class="placeholder">Configura los parámetros para generar el texto.</div></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="screen" id="libraryScreen">
+            <div class="screen-header">
+                <button class="back-btn" onclick="goHome()">←</button>
+                <h2 class="screen-title">Biblioteca de campañas</h2>
+            </div>
+            <div class="library-layout">
+                <aside class="library-filters">
+                    <h3 class="filters-title">Filtrar</h3>
+                    <div class="filter-group">
+                        <button class="filter-btn active" onclick="filterLib('all',this)">📋 Todas</button>
+                    </div>
+                    <div class="filter-group">
+                        <div class="filter-group-title">IKEA Family</div>
+                        <button class="filter-btn" onclick="filterLib('ifmc',this)">💳 Mastercard</button>
+                        <button class="filter-btn" onclick="filterLib('iff',this)">🏠 Fidelidad</button>
+                        <button class="filter-btn" onclick="filterLib('ifb',this)">🏢 Negocio</button>
+                    </div>
+                    <div class="filter-group">
+                        <div class="filter-group-title">Ventajon</div>
+                        <button class="filter-btn" onclick="filterLib('vjon',this)">💳 Visa</button>
+                        <button class="filter-btn" onclick="filterLib('tdv',this)">💳 Débito</button>
+                    </div>
+                </aside>
+                <div class="library-content">
+                    <div class="library-header">
+                        <div class="library-search">
+                            <span>🔍</span>
+                            <input type="text" placeholder="Buscar..." id="libSearch" oninput="renderLibrary()">
+                        </div>
+                        <span class="library-count" id="libCount"></span>
+                    </div>
+                    <div class="campaigns-grid" id="campaignsGrid"></div>
+                </div>
+            </div>
+        </div>
+        <div class="screen" id="documentsScreen">
+            <div class="screen-header">
+                <button class="back-btn" onclick="goHome()">←</button>
+                <h2 class="screen-title">Gestión de documentos</h2>
+            </div>
+            <div class="docs-layout">
+                <div class="docs-panel">
+                    <h3 class="docs-title">📤 Subir documentos</h3>
+                    <div class="upload-area" onclick="document.getElementById('fileInput').click()">
+                        <p>Arrastra o <span>haz clic</span> para subir</p>
+                        <p style="font-size:0.75rem;color:var(--text-muted);margin-top:0.5rem;">Excel (.xlsx) o Word (.docx)</p>
+                        <input type="file" id="fileInput" style="display:none;" multiple accept=".xlsx,.xls,.docx,.doc" onchange="uploadFiles(event)">
+                    </div>
+                    <button class="btn btn-primary btn-update" onclick="processAllDocs()">🔄 Procesar y actualizar datos</button>
+                    <div style="margin-top:1rem;padding:0.75rem;background:#E3F2FD;border-radius:var(--radius-sm);font-size:0.8rem;color:#1565C0;">
+                        💡 <strong>Parser inteligente</strong><br>
+                        Detecta automáticamente plazos, TIN e importes mínimos de los Excel.
+                    </div>
+                    <div class="process-log" id="processLog" style="display:none;"></div>
+                </div>
+                <div class="docs-panel">
+                    <h3 class="docs-title">📁 Documentos cargados <span id="docCount" style="font-weight:normal;color:var(--text-muted);font-size:0.85rem;"></span></h3>
+                    <div class="doc-list" id="docList"></div>
+                    <button class="btn btn-outline" style="margin-top:1rem;width:100%;justify-content:center;" onclick="clearAllDocs()">🗑️ Eliminar documentos</button>
+                    <button class="btn btn-outline" style="margin-top:0.5rem;width:100%;justify-content:center;border-color:#c62828;color:#c62828;" onclick="resetToDefaults()">⚠️ Borrar TODO (docs + campañas)</button>
+                    
+                    <button class="btn btn-primary" style="margin-top:1rem;width:100%;justify-content:center;background:#00A65A;" onclick="exportDataForGitHub()">📦 Exportar datos para GitHub</button>
+                    
+                    <div class="extracted-data" id="extractedData" style="display:none;">
+                        <div class="extracted-title">📊 Datos extraídos <span class="data-source-badge excel">Desde Excel</span></div>
+                        <div id="extractedContent"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+    <div class="toast-container" id="toastContainer"></div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/mammoth/1.6.0/mammoth.browser.min.js"></script>
+    <script>
+    const RULES = {
+        promoTypes: {
+            ifmc: ['cashback','bienvenida','cumpleanos','cashback_xtra','financiacion_sin','financiacion_con'],
+            vjon: ['cashback','bienvenida','cumpleanos','cashback_xtra','financiacion_sin'],
+            tdv: ['cashback','cashback_xtra'],
+            iff: ['cheque'],
+            ifb: ['cheque']
+        },
+        channels: {
+            ifmc: { cashback:['tienda','web','eas'], bienvenida:['tienda','web'], cumpleanos:['tienda','web'], cashback_xtra:['cualquier'], financiacion_sin:['tienda','web'], financiacion_con:['tienda','web'] },
+            vjon: { cashback:['tienda','web','eas','tonline'], bienvenida:['tienda','web','tonline'], cumpleanos:['tienda','web'], cashback_xtra:['cualquier'], financiacion_sin:['tienda','web'] },
+            tdv: { cashback:['eas'], cashback_xtra:['cualquier'] },
+            iff: { cheque:['tienda','web'] },
+            ifb: { cheque:['tienda','web'] }
+        },
+        geos: {
+            ifmc: ['baleares','canarias'],
+            vjon: ['baleares','canarias','peninsula','nacional'],
+            tdv: ['nacional'],
+            iff: ['baleares','canarias'],
+            ifb: ['baleares','canarias']
+        },
+        promoNames: { cashback:'CASH BACK', bienvenida:'Bienvenida', cumpleanos:'Cumpleaños', cashback_xtra:'CASH BACK XTRA', financiacion_sin:'Financiación Sin Intereses', financiacion_con:'Financiación Con Intereses', cheque:'Cheque compra' },
+        channelInfo: { tienda:{i:'🏪',l:'Tiendas IKEA'}, web:{i:'🌐',l:'Web islas.ikea.es'}, eas:{i:'🤝',l:'Empresas Asociadas'}, tonline:{i:'🛒',l:'Tienda Online'}, cualquier:{i:'💳',l:'Cualquier transacción'} },
+        cardNames: { ifmc:'IKEA Family MC', vjon:'Ventajon Visa', tdv:'Ventajon Débito', iff:'IFF', ifb:'IFB' },
+        fixedTypes: ['bienvenida','cumpleanos','cashback_xtra','cheque'],
+        // Planes de financiación - SE CARGAN DESDE DOCUMENTOS
+        plazos_sin: {
+            ifmc: [],
+            vjon: []
+        },
+        // Planes de financiación CON INTERESES - SE CARGAN DESDE DOCUMENTOS
+        plazos_con: {
+            ifmc: []
+        }
+    };
+
+    // NO hay campañas por defecto - todo viene de los documentos del usuario
+    const DEFAULT_CAMPAIGNS = [];
+
+    // Cargar campañas desde localStorage o empezar vacío
+    let CAMPAIGNS = JSON.parse(localStorage.getItem('legalTexts_campaigns')) || [];
+
+    let currentStep = 1, currentFilter = 'all';
+    let config = { card:'', geos:[], promoType:'', channels:[], pct:'', merchants:[], maxAmount:6000 };
+    
+    // Cargar documentos desde localStorage - SIN documentos por defecto
+    let docs = JSON.parse(localStorage.getItem('legalTexts_docs')) || [];
+    
+    // Guardar documentos en localStorage (sin datos binarios)
+    function saveDocs() {
+        const docsToSave = docs.map(d => ({
+            name: d.name,
+            date: d.date,
+            type: d.type
+        }));
+        localStorage.setItem('legalTexts_docs', JSON.stringify(docsToSave));
+    }
+    
+    // Guardar campañas en localStorage
+    function saveCampaigns() {
+        localStorage.setItem('legalTexts_campaigns', JSON.stringify(CAMPAIGNS));
+    }
+    
+    // Limpiar todo - volver a estado vacío
+    function resetToDefaults() {
+        if (!confirm('¿Eliminar TODOS los datos? Esto borrará documentos, campañas y configuración de financiación.')) return;
+        
+        try {
+            CAMPAIGNS = [];
+            docs = [];
+            
+            // Limpiar localStorage
+            localStorage.removeItem('legalTexts_campaigns');
+            localStorage.removeItem('legalTexts_extractedData');
+            localStorage.removeItem('legalTexts_docs');
+            
+            // Resetear RULES de financiación a vacío
+            RULES.plazos_sin = { ifmc: [], vjon: [] };
+            RULES.plazos_con = { ifmc: [] };
+            
+            // Actualizar UI
+            renderDocs();
+            renderHome();
+            
+            const extractedDiv = document.getElementById('extractedData');
+            if (extractedDiv) extractedDiv.style.display = 'none';
+            
+            toast('Todo eliminado - sube documentos para empezar', 'success');
+        } catch (e) {
+            console.error('Error al resetear:', e);
+            toast('Error al eliminar datos', 'error');
+        }
+    }
+
+    // Inicializar al cargar
+    document.addEventListener('DOMContentLoaded', async function() {
+        // Intentar cargar datos desde GitHub primero
+        await loadRemoteData();
+        
+        // Luego cargar datos locales (localStorage) si existen
+        loadExtractedData();
+        renderDocs();
+        renderHome();
+    });
+    
+    // Cargar datos desde el repositorio de GitHub
+    async function loadRemoteData() {
+        const BASE_URL = getBaseUrl();
+        
+        try {
+            // Cargar plazos
+            const plazosResp = await fetch(BASE_URL + 'data/plazos.json');
+            if (plazosResp.ok) {
+                const plazosData = await plazosResp.json();
+                if (plazosData.sin_intereses) {
+                    if (plazosData.sin_intereses.ifmc && plazosData.sin_intereses.ifmc.length > 0) {
+                        RULES.plazos_sin.ifmc = plazosData.sin_intereses.ifmc;
+                    }
+                    if (plazosData.sin_intereses.vjon && plazosData.sin_intereses.vjon.length > 0) {
+                        RULES.plazos_sin.vjon = plazosData.sin_intereses.vjon;
+                    }
+                }
+                if (plazosData.con_intereses && plazosData.con_intereses.ifmc && plazosData.con_intereses.ifmc.length > 0) {
+                    RULES.plazos_con.ifmc = plazosData.con_intereses.ifmc;
+                }
+                console.log('✅ Plazos cargados desde GitHub');
+            }
+        } catch (e) {
+            console.log('ℹ️ No se pudieron cargar plazos remotos:', e.message);
+        }
+        
+        try {
+            // Cargar campañas
+            const campanasResp = await fetch(BASE_URL + 'data/campanas.json');
+            if (campanasResp.ok) {
+                const campanasData = await campanasResp.json();
+                if (campanasData.campaigns && campanasData.campaigns.length > 0) {
+                    CAMPAIGNS = campanasData.campaigns;
+                    console.log('✅ Campañas cargadas desde GitHub:', CAMPAIGNS.length);
+                }
+            }
+        } catch (e) {
+            console.log('ℹ️ No se pudieron cargar campañas remotas:', e.message);
+        }
+    }
+    
+    // Obtener URL base (funciona en local y en GitHub Pages)
+    function getBaseUrl() {
+        const loc = window.location;
+        if (loc.hostname === 'localhost' || loc.hostname === '127.0.0.1' || loc.protocol === 'file:') {
+            return './';  // Local
+        }
+        return loc.pathname.replace(/\/[^\/]*$/, '/');  // GitHub Pages
+    }
+    
+    // Exportar datos para subir a GitHub
+    function exportDataForGitHub() {
+        const hasPlazos = RULES.plazos_sin.ifmc.length > 0 || RULES.plazos_sin.vjon.length > 0 || RULES.plazos_con.ifmc.length > 0;
+        const hasCampanas = CAMPAIGNS.length > 0;
+        
+        if (!hasPlazos && !hasCampanas) {
+            toast('No hay datos para exportar. Procesa documentos primero.', 'warning');
+            return;
+        }
+        
+        const today = new Date().toISOString().split('T')[0];
+        
+        // Crear JSON de plazos
+        if (hasPlazos) {
+            const plazosData = {
+                version: "1.0",
+                updated: today,
+                sin_intereses: {
+                    ifmc: RULES.plazos_sin.ifmc,
+                    vjon: RULES.plazos_sin.vjon
+                },
+                con_intereses: {
+                    ifmc: RULES.plazos_con.ifmc
+                }
+            };
+            downloadJSON(plazosData, 'plazos.json');
+        }
+        
+        // Crear JSON de campañas
+        if (hasCampanas) {
+            const campanasData = {
+                version: "1.0",
+                updated: today,
+                campaigns: CAMPAIGNS
+            };
+            downloadJSON(campanasData, 'campanas.json');
+        }
+        
+        toast('Archivos exportados. Súbelos a la carpeta /data/ en GitHub.', 'success');
+    }
+    
+    // Descargar archivo JSON
+    function downloadJSON(data, filename) {
+        const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = filename;
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        URL.revokeObjectURL(url);
+    }
+    
+    // Renderizar pantalla de inicio según estado de datos
+    function renderHome() {
+        const hasData = CAMPAIGNS.length > 0 || RULES.plazos_sin.ifmc.length > 0 || RULES.plazos_sin.vjon.length > 0 || RULES.plazos_con.ifmc.length > 0;
+        const hasCampaigns = CAMPAIGNS.length > 0;
+        
+        let html = '';
+        
+        // Tarjeta Crear promoción
+        if (hasData) {
+            html += '<div class="home-card" onclick="goToCreator()"><div class="home-card-icon"><svg viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg></div><h3 class="home-card-title">Crear promoción</h3><p class="home-card-desc">Genera texto legal paso a paso</p></div>';
+        } else {
+            html += '<div class="home-card disabled" onclick="goToDocuments()"><div class="home-card-icon" style="background:linear-gradient(135deg,#9E9E9E,#757575);"><svg viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg></div><h3 class="home-card-title">Crear promoción</h3><p class="home-card-desc" style="color:var(--text-muted);">Sube documentos primero</p><span class="coming-soon" style="background:#9E9E9E;">Sin datos</span></div>';
+        }
+        
+        // Tarjeta Biblioteca
+        if (hasCampaigns) {
+            html += '<div class="home-card" onclick="goToLibrary()"><div class="home-card-icon"><svg viewBox="0 0 24 24"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg></div><h3 class="home-card-title">Biblioteca</h3><p class="home-card-desc">' + CAMPAIGNS.length + ' campaña' + (CAMPAIGNS.length !== 1 ? 's' : '') + ' disponibles</p></div>';
+        } else {
+            html += '<div class="home-card disabled" onclick="goToDocuments()"><div class="home-card-icon" style="background:linear-gradient(135deg,#9E9E9E,#757575);"><svg viewBox="0 0 24 24"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg></div><h3 class="home-card-title">Biblioteca</h3><p class="home-card-desc" style="color:var(--text-muted);">Sube documentos Word</p><span class="coming-soon" style="background:#9E9E9E;">Vacía</span></div>';
+        }
+        
+        // Tarjeta Documentos - siempre activa
+        html += '<div class="home-card" onclick="goToDocuments()" style="border:2px solid var(--ikea-blue);"><div class="home-card-icon" style="background:linear-gradient(135deg,var(--success),#00873C);"><svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="12" y1="18" x2="12" y2="12"/><line x1="9" y1="15" x2="15" y2="15"/></svg></div><h3 class="home-card-title">📤 Documentos</h3><p class="home-card-desc">' + (docs.length > 0 ? docs.length + ' archivo' + (docs.length !== 1 ? 's' : '') : 'Empieza aquí') + '</p></div>';
+        
+        document.getElementById('homeOptions').innerHTML = html;
+    }
+
+    function showScreen(id) {
+        document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+        document.getElementById(id).classList.add('active');
+        document.getElementById('exportBtn').style.display = id === 'creatorScreen' ? 'flex' : 'none';
+    }
+    function goHome() { renderHome(); showScreen('homeScreen'); }
+    function goToCreator() { 
+        // Verificar si hay datos cargados
+        if (CAMPAIGNS.length === 0 && (!RULES.plazos_sin.ifmc.length && !RULES.plazos_sin.vjon.length && !RULES.plazos_con.ifmc.length)) {
+            toast('Primero sube y procesa documentos', 'warning');
+            showScreen('documentsScreen');
+            renderDocs();
+            return;
+        }
+        document.querySelector('.sidebar').style.display = 'block';
+        document.querySelector('.creator-layout').style.gridTemplateColumns = '360px 1fr';
+        resetConfig(); 
+        showScreen('creatorScreen'); 
+    }
+    function goToLibrary() { 
+        if (CAMPAIGNS.length === 0) {
+            toast('No hay campañas - sube documentos Word primero', 'warning');
+            showScreen('documentsScreen');
+            renderDocs();
+            return;
+        }
+        renderLibrary(); 
+        showScreen('libraryScreen'); 
+    }
+    function goToDocuments() { renderDocs(); showScreen('documentsScreen'); }
+
+    function resetConfig() {
+        currentStep = 1;
+        config = { card:'', geos:[], promoType:'', channels:[], pct:'', merchants:[], maxAmount:6000 };
+        document.getElementById('cardType').value = '';
+        document.querySelectorAll('[data-geo]').forEach(el => el.classList.remove('selected','disabled'));
+        document.getElementById('infoCard').textContent = '-';
+        document.getElementById('infoVigencia').textContent = '-';
+        document.getElementById('infoEstado').textContent = 'Configurando...';
+        document.getElementById('legalOutput').innerHTML = '<div class="placeholder">Configura los parámetros para generar el texto.</div>';
+        const today = new Date();
+        document.getElementById('dateStart').value = today.toISOString().slice(0,10);
+        document.getElementById('dateEnd').value = new Date(today.getFullYear(),11,31).toISOString().slice(0,10);
+        showStep(1);
+    }
+
+    function showStep(n) {
+        document.querySelectorAll('.step-content').forEach(el => el.style.display = 'none');
+        document.getElementById('step'+n).style.display = 'block';
+        document.querySelectorAll('.step').forEach((el,i) => {
+            el.classList.remove('active','completed');
+            if (i+1 < n) el.classList.add('completed');
+            if (i+1 === n) el.classList.add('active');
+        });
+        currentStep = n;
+        if (n === 2) { renderPromoTypes(); renderChannels(); }
+        if (n === 3) updateStep3();
+        if (n === 4) renderConditions();
+    }
+
+    function goToStep(n) {
+        if (n <= currentStep) { showStep(n); return; }
+        for (let i = currentStep; i < n; i++) { currentStep = i; if (!validateStep()) return; }
+        showStep(n);
+    }
+    function nextStep() { if (validateStep() && currentStep < 4) showStep(currentStep+1); }
+    function prevStep() { if (currentStep > 1) showStep(currentStep-1); }
+
+    function validateStep() {
+        if (currentStep === 1) {
+            if (!config.card) { toast('Selecciona tarjeta','warning'); return false; }
+            if (!config.geos.length) { toast('Selecciona geografía','warning'); return false; }
+        }
+        if (currentStep === 2) {
+            if (!config.promoType) { toast('Selecciona tipo','warning'); return false; }
+            if (!config.channels.length) { toast('Selecciona canal','warning'); return false; }
+        }
+        return true;
+    }
+
+    function onCardChange() {
+        config.card = document.getElementById('cardType').value;
+        config.geos = []; config.promoType = ''; config.channels = [];
+        document.querySelectorAll('[data-geo]').forEach(el => el.classList.remove('selected','disabled'));
+        if (config.card) {
+            const avail = RULES.geos[config.card] || [];
+            document.querySelectorAll('[data-geo]').forEach(el => {
+                if (!avail.includes(el.dataset.geo)) el.classList.add('disabled');
+            });
+            document.getElementById('infoCard').textContent = RULES.cardNames[config.card];
+        } else {
+            document.getElementById('infoCard').textContent = '-';
+        }
+    }
+
+    function toggleGeo(el) {
+        if (el.classList.contains('disabled')) return;
+        const geo = el.dataset.geo;
+        if (geo === 'nacional') {
+            document.querySelectorAll('[data-geo]').forEach(e => e.classList.remove('selected'));
+            el.classList.add('selected');
+            config.geos = ['nacional'];
+        } else {
+            document.querySelector('[data-geo="nacional"]')?.classList.remove('selected');
+            config.geos = config.geos.filter(g => g !== 'nacional');
+            if (el.classList.contains('selected')) {
+                el.classList.remove('selected');
+                config.geos = config.geos.filter(g => g !== geo);
+            } else {
+                el.classList.add('selected');
+                config.geos.push(geo);
+            }
+        }
+    }
+
+    function renderPromoTypes() {
+        const sel = document.getElementById('promoType');
+        sel.innerHTML = '<option value="">Selecciona...</option>';
+        (RULES.promoTypes[config.card]||[]).forEach(t => {
+            sel.innerHTML += '<option value="'+t+'">'+RULES.promoNames[t]+'</option>';
+        });
+    }
+
+    function onPromoTypeChange() {
+        config.promoType = document.getElementById('promoType').value;
+        config.channels = [];
+        renderChannels();
+    }
+
+    function renderChannels() {
+        const grid = document.getElementById('channelGrid');
+        grid.innerHTML = '';
+        if (!config.card || !config.promoType) return;
+        const avail = RULES.channels[config.card]?.[config.promoType] || [];
+        avail.forEach(ch => {
+            const info = RULES.channelInfo[ch];
+            const div = document.createElement('div');
+            div.className = 'option-card' + (ch === 'cualquier' ? ' full-width' : '');
+            div.dataset.channel = ch;
+            div.onclick = function() { toggleChannel(div); };
+            div.innerHTML = '<div class="option-icon">'+info.i+'</div><div class="option-label">'+info.l+'</div>';
+            grid.appendChild(div);
+        });
+        if (avail.length === 1) {
+            grid.querySelector('.option-card').classList.add('selected');
+            config.channels = [avail[0]];
+        }
+    }
+
+    function toggleChannel(el) {
+        const ch = el.dataset.channel;
+        if (ch === 'cualquier') {
+            document.querySelectorAll('[data-channel]').forEach(e => e.classList.remove('selected'));
+            el.classList.add('selected');
+            config.channels = ['cualquier'];
+        } else {
+            document.querySelector('[data-channel="cualquier"]')?.classList.remove('selected');
+            config.channels = config.channels.filter(c => c !== 'cualquier');
+            if (el.classList.contains('selected')) {
+                el.classList.remove('selected');
+                config.channels = config.channels.filter(c => c !== ch);
+            } else {
+                el.classList.add('selected');
+                config.channels.push(ch);
+            }
+        }
+    }
+
+    function updateStep3() {
+        const pctG = document.getElementById('pctGroup');
+        const easG = document.getElementById('easGroup');
+        const maxG = document.getElementById('maxGroup');
+        const fixG = document.getElementById('fixedInfo');
+        const plazosG = document.getElementById('plazosGroup');
+        pctG.style.display = 'none';
+        easG.style.display = 'none';
+        maxG.style.display = 'none';
+        fixG.style.display = 'none';
+        plazosG.style.display = 'none';
+
+        if (RULES.fixedTypes.includes(config.promoType)) {
+            fixG.style.display = 'block';
+            let msg = 'Esta campaña tiene condiciones predefinidas según el programa.';
+            if (config.promoType === 'bienvenida') msg = 'Bienvenida: 10% CASH BACK 5 días + extras según tarjeta y geografía.';
+            if (config.promoType === 'cumpleanos') msg = 'Cumpleaños: 10% ±2 días + 30% Restaurante el día del cumpleaños.';
+            if (config.promoType === 'cashback_xtra') msg = 'CASH BACK XTRA: 2% en cualquier comercio del mundo.';
+            if (config.promoType === 'cheque') msg = 'Cheque compra: Descuentos fijos según tarjeta (5%/10%).';
+            document.getElementById('fixedInfoText').textContent = msg;
+        } else if (config.promoType === 'financiacion_sin' || config.promoType === 'financiacion_con') {
+            plazosG.style.display = 'block';
+            maxG.style.display = 'block';
+            renderPlazos();
+        } else if (config.channels.includes('eas')) {
+            easG.style.display = 'block';
+            maxG.style.display = 'block';
+            resetEas();
+        } else if (config.promoType === 'cashback') {
+            pctG.style.display = 'block';
+            maxG.style.display = 'block';
+        }
+    }
+
+    function resetEas() {
+        document.getElementById('easList').innerHTML = '<div class="eas-row"><input type="text" class="form-input" placeholder="Empresa"><input type="number" class="form-input" placeholder="%" min="1" max="100"><button class="btn-remove" onclick="removeEas(this)">×</button></div>';
+    }
+
+    function renderPlazos() {
+        let plazosData = [];
+        
+        if (config.promoType === 'financiacion_sin') {
+            plazosData = RULES.plazos_sin[config.card] || [];
+        } else if (config.promoType === 'financiacion_con') {
+            plazosData = RULES.plazos_con[config.card] || [];
+        }
+        
+        if (plazosData.length === 0) {
+            document.getElementById('plazosList').innerHTML = '<div style="padding:1rem;color:var(--text-muted);text-align:center;">No hay plazos disponibles para esta combinación</div>';
+            return;
+        }
+        
+        const isSinIntereses = config.promoType === 'financiacion_sin';
+        
+        document.getElementById('plazosList').innerHTML = plazosData.map(p => {
+            const tinLabel = isSinIntereses ? '' : ' | TIN ' + p.tin.toFixed(2).replace('.',',') + '%';
+            return '<div class="checkbox-item"><input type="checkbox" id="plazo'+p.months+'" data-meses="'+p.months+'" data-min="'+p.min+'" data-max="'+p.max+'" data-tin="'+p.tin+'" data-code="'+p.code+'" checked><label for="plazo'+p.months+'">'+p.months+' meses (desde '+p.min+'€)'+tinLabel+'</label></div>';
+        }).join('');
+        
+        // Actualizar el selector de importe máximo según el tipo
+        const maxSelect = document.getElementById('maxAmount');
+        const maxVal = plazosData[0]?.max || 6000;
+        maxSelect.innerHTML = '<option value="'+maxVal+'">'+maxVal.toLocaleString('es-ES')+'€</option>';
+    }
+
+    function getSelectedPlazos() {
+        const plazos = [];
+        document.querySelectorAll('#plazosList input:checked').forEach(cb => {
+            plazos.push({
+                m: parseInt(cb.dataset.meses), 
+                min: parseInt(cb.dataset.min),
+                max: parseInt(cb.dataset.max),
+                tin: parseFloat(cb.dataset.tin),
+                code: cb.dataset.code
+            });
+        });
+        return plazos.sort((a,b) => a.m - b.m);
+    }
+    function addEas() {
+        const list = document.getElementById('easList');
+        const row = document.createElement('div');
+        row.className = 'eas-row';
+        row.innerHTML = '<input type="text" class="form-input" placeholder="Empresa"><input type="number" class="form-input" placeholder="%" min="1" max="100"><button class="btn-remove" onclick="removeEas(this)">×</button>';
+        list.appendChild(row);
+    }
+    function removeEas(btn) {
+        if (document.querySelectorAll('.eas-row').length > 1) btn.parentElement.remove();
+    }
+    function getMerchants() {
+        const m = [];
+        document.querySelectorAll('.eas-row').forEach(r => {
+            const name = r.querySelector('input[type="text"]').value.trim();
+            const pct = r.querySelector('input[type="number"]').value;
+            if (name && pct) m.push({name:name,pct:pct});
+        });
+        return m;
+    }
+
+    function renderConditions() {
+        const g = document.getElementById('conditionsList');
+        if (['cashback','bienvenida','cumpleanos','cashback_xtra'].includes(config.promoType)) {
+            g.innerHTML = '<div class="checkbox-item"><input type="checkbox" checked id="condNoAcum"><label>No acumulable a otras ofertas</label></div><div class="checkbox-item locked"><input type="checkbox" checked disabled><label>Mínimo 3€ acumulados</label></div><div class="checkbox-item locked"><input type="checkbox" checked disabled><label>Abono 35 días tras fin de mes</label></div><div class="checkbox-item locked"><input type="checkbox" checked disabled><label>Máximo 300€/mes CASH BACK</label></div>';
+        } else {
+            g.innerHTML = '<div class="checkbox-item"><input type="checkbox" checked id="condNoAcum"><label>No acumulable a otras ofertas</label></div>';
+        }
+    }
+
+    function generateText() {
+        const startDate = document.getElementById('dateStart').value;
+        const endDate = document.getElementById('dateEnd').value;
+        config.pct = document.getElementById('mainPct')?.value || '';
+        config.merchants = getMerchants();
+        config.maxAmount = document.getElementById('maxAmount')?.value || 6000;
+        const text = buildText(startDate, endDate);
+        document.getElementById('legalOutput').innerHTML = text;
+        document.getElementById('infoEstado').textContent = '✓ Generado';
+        document.getElementById('infoVigencia').textContent = fmtDate(startDate) + ' - ' + fmtDate(endDate);
+        toast('Texto generado','success');
+    }
+
+    function buildText(startDate, endDate) {
+        const geo = fmtGeo();
+        const start = fmtDate(startDate);
+        const end = fmtDate(endDate);
+        const year = new Date().getFullYear();
+        const annualEnd = '31/12/' + year;
+        let intro = getIntro();
+        let body = '';
+        switch(config.promoType) {
+            case 'cashback': body = buildCashback(geo, start, end); break;
+            case 'financiacion_sin': body = buildFinanciacionSin(geo, annualEnd); break;
+            case 'financiacion_con': body = buildFinanciacionCon(geo, annualEnd); break;
+            case 'bienvenida': body = buildBienvenida(geo, annualEnd); break;
+            case 'cumpleanos': body = buildCumpleanos(geo, annualEnd); break;
+            case 'cashback_xtra': body = buildCashbackXtra(geo, annualEnd); break;
+            case 'cheque': body = buildCheque(geo); break;
+        }
+        return (intro ? intro + ' ' : '') + body;
+    }
+
+    function getIntro() {
+        const intros = {
+            ifmc: 'La tarjeta IKEA Family Mastercard es emitida por Santander Consumer Finance, S.A., y está sujeta a su aprobación.',
+            vjon: 'La tarjeta VENTAJON es emitida por la Entidad de Pago híbrida CaixaBank Payments & Consumer, E.F.C., E.P., S.A.U., y está sujeta a su autorización.',
+            tdv: 'La tarjeta débito VENTAJON es emitida por PECUNIA CARDS EDE, S.L.U. NIF B86972346 Inscrita en el Registro Mercantil de Madrid, Hoja M-509721, Tomo 28300 Folio 26. Inscripción 1ª. Registro de Banco de España 6707.'
+        };
+        return intros[config.card] || '';
+    }
+
+    function buildCashback(geo, start, end) {
+        const cardName = config.card === 'ifmc' ? 'IKEA Family Mastercard' : (config.card === 'tdv' ? 'débito VENTAJON' : 'VENTAJON');
+        let promo = '';
+        if (config.merchants.length > 0) {
+            const parts = config.merchants.map(m => m.pct + '% CASH BACK en ' + m.name);
+            promo = '*' + (parts.length > 1 ? parts.slice(0,-1).join(', ') + ' y ' + parts[parts.length-1] : parts[0]);
+            promo += ' del ' + start + ' al ' + end + '. Promoción válida para compras realizadas con tarjeta ' + cardName + '. ';
+        } else if (config.pct) {
+            const chDesc = config.channels.includes('cualquier') ? 'cualquier comercio físico u online del mundo' : fmtChannels();
+            promo = '*' + config.pct + '% CASH BACK en ' + chDesc + ' del ' + start + ' al ' + end + '. Promoción válida para compras realizadas con tarjeta ' + cardName + '. ';
+        }
+        return promo + 'CASH BACK es un beneficio ofrecido por el Club de Ventajas. La transferencia de CASH BACK se recibirá 35 días después de finalizar el mes en que se realizaron las compras, una vez acumulado un mínimo de 3€. Máximo 300€/mes. Oferta válida hasta ' + end + '.';
+    }
+
+    function buildFinanciacionSin(geo, end) {
+        const selectedPlazos = getSelectedPlazos();
+        if (selectedPlazos.length === 0) return 'Selecciona al menos un plazo de financiación.';
+        
+        const max = selectedPlazos[0]?.max || 6000;
+        const min = Math.min(...selectedPlazos.map(p => p.min));
+        const plazosStr = selectedPlazos.map(p => p.m).join(', ').replace(/, ([^,]*)$/, ' y $1');
+        const importesStr = selectedPlazos.map(p => p.min + '€').join(', ').replace(/, ([^,]*)$/, ' y $1');
+        
+        // Ejemplo representativo con 12 meses si está disponible, si no el primero
+        const ejemploPlazo = selectedPlazos.find(p => p.m === 12) || selectedPlazos[0];
+        const ejemploImporte = 720;
+        const cuotaEjemplo = (ejemploImporte / ejemploPlazo.m).toFixed(2).replace('.', ',');
+        
+        return 'TIN 0% TAE 0%. Financiación a ' + plazosStr + ' meses sin intereses para compras iguales o superiores a ' + importesStr + ' respectivamente, y hasta un máximo de ' + max.toLocaleString('es-ES') + '€. Importe mínimo a financiar ' + min + '€. Ejemplo representativo para una compra financiada en ' + ejemploPlazo.m + ' meses de ' + ejemploImporte + '€. Importe de las ' + ejemploPlazo.m + ' cuotas ' + cuotaEjemplo + '€. Precio total a plazos e importe total adeudado: ' + ejemploImporte + '€. Coste total del crédito e intereses 0€. Sistema de amortización francés. No acumulable a CASH BACK ni otras ofertas y válida para compras realizadas en tiendas IKEA ' + geo + ' o en www.islas.IKEA.es. Oferta válida hasta ' + end + '. Intereses subvencionados por IKEA.';
+    }
+
+    function buildFinanciacionCon(geo, end) {
+        const selectedPlazos = getSelectedPlazos();
+        if (selectedPlazos.length === 0) return 'Selecciona al menos un plazo de financiación.';
+        
+        const max = selectedPlazos[0]?.max || 8000;
+        const min = Math.min(...selectedPlazos.map(p => p.min));
+        
+        // Agrupar plazos por TIN
+        const tinGroups = {};
+        selectedPlazos.forEach(p => {
+            const tinKey = p.tin.toFixed(2);
+            if (!tinGroups[tinKey]) tinGroups[tinKey] = [];
+            tinGroups[tinKey].push(p);
+        });
+        
+        // Generar texto de plazos con TIN
+        let plazosTexto = [];
+        for (const tin in tinGroups) {
+            const plazos = tinGroups[tin];
+            const mesesStr = plazos.map(p => p.m).join(', ').replace(/, ([^,]*)$/, ' y $1');
+            const tinFormatted = parseFloat(tin).toFixed(2).replace('.', ',');
+            plazosTexto.push(mesesStr + ' meses (TIN ' + tinFormatted + '%)');
+        }
+        
+        // Ejemplo representativo con 12 meses
+        const ejemploPlazo = selectedPlazos.find(p => p.m === 12) || selectedPlazos[0];
+        const ejemploImporte = 720;
+        const tinMensual = ejemploPlazo.tin / 100 / 12;
+        const cuotaEjemplo = (ejemploImporte * tinMensual * Math.pow(1 + tinMensual, ejemploPlazo.m)) / (Math.pow(1 + tinMensual, ejemploPlazo.m) - 1);
+        const totalPagado = cuotaEjemplo * ejemploPlazo.m;
+        const intereses = totalPagado - ejemploImporte;
+        const tae = (Math.pow(1 + ejemploPlazo.tin/100/12, 12) - 1) * 100;
+        
+        return 'Financiación a ' + plazosTexto.join('; ') + ' para compras desde ' + min + '€ hasta ' + max.toLocaleString('es-ES') + '€. Ejemplo representativo para una compra de ' + ejemploImporte + '€ financiada a ' + ejemploPlazo.m + ' meses. Cuota mensual ' + cuotaEjemplo.toFixed(2).replace('.', ',') + '€. TIN ' + ejemploPlazo.tin.toFixed(2).replace('.', ',') + '% TAE ' + tae.toFixed(2).replace('.', ',') + '%. Importe total adeudado ' + totalPagado.toFixed(2).replace('.', ',') + '€. Coste total del crédito (intereses) ' + intereses.toFixed(2).replace('.', ',') + '€. Sistema de amortización francés. La TAE podrá variar ligeramente en función del día de la firma del contrato y de la fecha de pago de las cuotas. Oferta válida hasta ' + end + '. Financiación ofrecida por Santander Consumer Finance, S.A. a través de la tarjeta IKEA Family Mastercard, sujeta a su aprobación.';
+    }
+
+    function buildBienvenida(geo, end) {
+        const cardName = config.card === 'ifmc' ? 'IKEA Family Mastercard' : 'VENTAJON Visa';
+        if (config.card === 'vjon' && config.geos.includes('peninsula')) {
+            return '*10% CASH BACK en Tienda Online VENTAJON, en gasolineras y ópticas asociadas durante 3 meses desde fecha alta de tarjeta VENTAJON. No acumulable a otras ofertas. Oferta válida hasta ' + end + '.';
+        }
+        let txt = '*10% CASH BACK en muebles y decoración o en www.islas.IKEA.es de IKEA ' + geo + ' durante 5 días consecutivos desde fecha de alta de tarjeta ' + cardName + ' y aplicable a un importe máximo de 3.000€. 5% CASH BACK a partir del sexto día. 30% CASH BACK en Restaurante Sueco y Bistro Sueco de IKEA ' + geo + ' en tu primer día de compras. 10% CASH BACK en Tienda Sueca de IKEA ' + geo + ' el primer día de compras. ';
+        if (config.card === 'vjon') txt += '10% CASH BACK en Tienda Online VENTAJON y gasolineras asociadas durante 3 meses desde fecha alta tarjeta. ';
+        txt += 'No acumulable a financiación sin intereses ni otras ofertas. Oferta válida hasta ' + end + '.';
+        return txt;
+    }
+
+    function buildCumpleanos(geo, end) {
+        const cardName = config.card === 'ifmc' ? 'IKEA Family Mastercard' : 'VENTAJON Visa';
+        return '*10% CASH BACK en IKEA ' + geo + ' en muebles y decoración, Tienda Sueca y en www.islas.IKEA.es el día del cumpleaños, dos días antes y dos días después. Válido para compras realizadas con tarjeta ' + cardName + ' y aplicable a un importe máximo de 1.000€. 30% CASH BACK en Restaurante Sueco y Bistro Sueco de IKEA ' + geo + ' el día de cumpleaños. No acumulable con ninguna otra oferta. Oferta válida hasta ' + end + '.';
+    }
+
+    function buildCashbackXtra(geo, end) {
+        const cardName = config.card === 'ifmc' ? 'IKEA Family Mastercard' : (config.card === 'tdv' ? 'débito VENTAJON' : 'VENTAJON Visa');
+        return '*2% CASH BACK XTRA en pagos realizados con tarjeta ' + cardName + ' en cualquier comercio físico u online del mundo. El CASH BACK XTRA se genera mensualmente, 35 días tras finalizar el mes en que se realizaron las compras y acumulando CASH BACK XTRA por un mínimo de 3€ y un máximo de 10€. Oferta válida hasta ' + end + '.';
+    }
+
+    function buildCheque(geo) {
+        if (config.card === 'iff') return 'En muebles y decoración, Tienda Sueca y en www.islas.IKEA.es de IKEA ' + geo + ': 5% de descuento en todas tus compras. En Restaurante Sueco y Bistro Sueco de IKEA ' + geo + ' 10% de descuento en todas tus compras. Cheque de compra máximo acumulado en IKEA: 150€ al mes.';
+        return 'En muebles y decoración de IKEA ' + geo + ' o en www.islas.IKEA.es: 10% de descuento el primer día de compra (5% de descuento en tus siguientes compras). En Restaurante Sueco y Bistro Sueco de IKEA ' + geo + ' 10% de descuento en todas tus compras. En Tienda Sueca de IKEA ' + geo + ': 5% de descuento en todas tus compras. Cheque de compra máximo acumulado en IKEA: 500€ al mes.';
+    }
+
+    function fmtGeo() {
+        if (config.geos.includes('nacional')) return 'Baleares, Canarias y Península';
+        const n = {baleares:'Baleares',canarias:'Canarias',peninsula:'Península'};
+        return config.geos.map(g => n[g]).join(' y ');
+    }
+    function fmtChannels() {
+        if (config.channels.includes('cualquier')) return 'cualquier comercio físico u online del mundo';
+        const n = {tienda:'tiendas IKEA',web:'www.islas.IKEA.es',eas:'establecimientos asociados',tonline:'Tienda Online VENTAJON'};
+        return config.channels.map(c => n[c]).join(', ');
+    }
+    function fmtDate(d) {
+        if (!d) return '';
+        const dt = new Date(d);
+        return dt.toLocaleDateString('es-ES',{day:'2-digit',month:'2-digit',year:'numeric'});
+    }
+
+    function renderLibrary() {
+        const search = (document.getElementById('libSearch')?.value || '').toLowerCase();
+        let filtered = CAMPAIGNS.filter(c => {
+            if (currentFilter !== 'all' && c.card !== currentFilter && c.type !== currentFilter) return false;
+            if (search && !c.title.toLowerCase().includes(search) && !c.desc.toLowerCase().includes(search)) return false;
+            return true;
+        });
+        document.getElementById('libCount').textContent = filtered.length + ' campaña' + (filtered.length !== 1 ? 's' : '');
+        
+        if (CAMPAIGNS.length === 0) {
+            document.getElementById('campaignsGrid').innerHTML = '<div style="grid-column:1/-1;text-align:center;padding:3rem;color:var(--text-muted);"><div style="font-size:3rem;margin-bottom:1rem;">📭</div><h3 style="margin-bottom:0.5rem;color:var(--text-secondary);">No hay campañas cargadas</h3><p>Sube documentos Word con textos legales en la sección <strong>Documentos</strong> y procésalos para ver las campañas aquí.</p></div>';
+            return;
+        }
+        
+        if (filtered.length === 0) {
+            document.getElementById('campaignsGrid').innerHTML = '<div style="grid-column:1/-1;text-align:center;padding:2rem;color:var(--text-muted);">No se encontraron campañas con ese filtro</div>';
+            return;
+        }
+        
+        const year = new Date().getFullYear();
+        document.getElementById('campaignsGrid').innerHTML = filtered.map(c => '<div class="campaign-card" onclick="useCampaign('+c.id+')"><div class="campaign-header"><div class="campaign-badges"><span class="badge badge-'+c.card+'">'+RULES.cardNames[c.card]+'</span><span class="badge badge-'+c.type+'">'+RULES.promoNames[c.type]+'</span></div><span class="campaign-geo">📍 '+c.geo+'</span></div><div class="campaign-body"><h4 class="campaign-title">'+c.title+'</h4><p class="campaign-desc">'+c.desc+'</p></div><div class="campaign-footer"><button class="btn-use">Usar campaña</button></div></div>').join('');
+    }
+
+    function filterLib(f, btn) {
+        currentFilter = f;
+        document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        renderLibrary();
+    }
+
+    function useCampaign(id) {
+        const c = CAMPAIGNS.find(x => x.id === id);
+        if (!c) return;
+        showScreen('creatorScreen');
+        document.getElementById('exportBtn').style.display = 'flex';
+        const year = new Date().getFullYear();
+        const text = c.text.replace(/{year}/g, year);
+        document.getElementById('legalOutput').innerHTML = text;
+        document.getElementById('infoCard').textContent = RULES.cardNames[c.card];
+        document.getElementById('infoVigencia').textContent = 'Todo el año ' + year;
+        document.getElementById('infoEstado').textContent = '✓ Generado';
+        document.querySelector('.sidebar').style.display = 'none';
+        document.querySelector('.creator-layout').style.gridTemplateColumns = '1fr';
+        toast('Campaña cargada','success');
+    }
+
+    function renderDocs() {
+        document.getElementById('docCount').textContent = '(' + docs.length + ')';
+        if (docs.length === 0) {
+            document.getElementById('docList').innerHTML = '<div style="text-align:center;padding:2rem;color:var(--text-muted);">No hay documentos cargados</div>';
+            return;
+        }
+        document.getElementById('docList').innerHTML = docs.map((d,i) => {
+            const hasData = d.data ? '' : ' style="opacity:0.5" title="Sin datos - volver a subir"';
+            const noDataBadge = d.data ? '' : '<span style="background:#FFCDD2;color:#C62828;font-size:0.65rem;padding:0.1rem 0.3rem;border-radius:3px;margin-left:0.5rem;">⚠️ Resubir</span>';
+            return '<div class="doc-item"' + hasData + '><div class="doc-icon '+d.type+'">'+d.type.toUpperCase()+'</div><div class="doc-info"><div class="doc-name">'+d.name+noDataBadge+'</div><div class="doc-meta">'+d.date+'</div></div><div class="doc-actions"><button class="btn-doc delete" onclick="removeDoc('+i+')">🗑️</button></div></div>';
+        }).join('');
+    }
+
+    function uploadFiles(e) {
+        const files = e.target.files;
+        for (let f of files) {
+            const ext = f.name.split('.').pop().toLowerCase();
+            if (!docs.find(d => d.name === f.name)) {
+                // Guardar el archivo real para procesarlo después
+                const reader = new FileReader();
+                reader.onload = function(event) {
+                    docs.unshift({
+                        name: f.name, 
+                        date: new Date().toLocaleDateString('es-ES'), 
+                        type: ext,
+                        data: event.target.result // ArrayBuffer del archivo
+                    });
+                    saveDocs();
+                    renderDocs();
+                };
+                reader.readAsArrayBuffer(f);
+            }
+        }
+        toast(files.length + ' documento(s) añadido(s)','success');
+        e.target.value = '';
+    }
+
+    function removeDoc(i) { 
+        docs.splice(i,1); 
+        saveDocs();
+        renderDocs(); 
+        toast('Documento eliminado','success'); 
+    }
+    
+    function clearAllDocs() {
+        if (!confirm('¿Eliminar todos los documentos?')) return;
+        
+        try {
+            docs = [];
+            saveDocs();
+            localStorage.removeItem('legalTexts_extractedData');
+            const extractedDiv = document.getElementById('extractedData');
+            if (extractedDiv) extractedDiv.style.display = 'none';
+            renderDocs();
+            toast('Todos los documentos eliminados','success');
+        } catch (e) {
+            console.error('Error al eliminar:', e);
+            toast('Error al eliminar documentos', 'error');
+        }
+    }
+
+    // ===== PARSER INTELIGENTE DE EXCEL =====
+    function logProcess(msg, type = 'info') {
+        const log = document.getElementById('processLog');
+        log.style.display = 'block';
+        const line = document.createElement('div');
+        line.className = 'log-line ' + type;
+        line.textContent = '[' + new Date().toLocaleTimeString() + '] ' + msg;
+        log.appendChild(line);
+        log.scrollTop = log.scrollHeight;
+    }
+
+    function clearLog() {
+        const log = document.getElementById('processLog');
+        log.innerHTML = '';
+        log.style.display = 'none';
+    }
+
+    async function processAllDocs() {
+        clearLog();
+        logProcess('Iniciando procesamiento de documentos...', 'info');
+        
+        // Filtrar documentos con datos
+        const xlsxDocs = docs.filter(d => (d.type === 'xlsx' || d.type === 'xls') && d.data);
+        const docxDocs = docs.filter(d => (d.type === 'docx' || d.type === 'doc') && d.data);
+        const docsWithoutData = docs.filter(d => !d.data);
+        
+        if (docsWithoutData.length > 0) {
+            logProcess('⚠️ ' + docsWithoutData.length + ' archivo(s) sin datos (volver a subir)', 'warning');
+        }
+        
+        if (xlsxDocs.length === 0 && docxDocs.length === 0) {
+            logProcess('No hay archivos con datos para procesar', 'warning');
+            toast('Sube archivos Excel o Word para procesar', 'warning');
+            return;
+        }
+        
+        let allExtracted = {
+            sin_intereses: [],
+            con_intereses: []
+        };
+        
+        let extractedCampaigns = [];
+        
+        // Procesar Excel (financiación)
+        if (xlsxDocs.length > 0) {
+            logProcess('📊 Procesando ' + xlsxDocs.length + ' archivo(s) Excel...', 'info');
+            
+            for (const doc of xlsxDocs) {
+                logProcess('  → ' + doc.name, 'info');
+                
+                try {
+                    const extracted = await parseExcelFile(doc);
+                    if (extracted) {
+                        if (extracted.type === 'sin_intereses') {
+                            allExtracted.sin_intereses = extracted.plazos;
+                            logProcess('  ✓ ' + extracted.plazos.length + ' plazos SIN intereses', 'success');
+                        } else if (extracted.type === 'con_intereses') {
+                            allExtracted.con_intereses = extracted.plazos;
+                            logProcess('  ✓ ' + extracted.plazos.length + ' plazos CON intereses', 'success');
+                        }
+                    }
+                } catch (err) {
+                    logProcess('  ✗ Error: ' + err.message, 'error');
+                }
+            }
+        }
+        
+        // Procesar Word (campañas y textos legales)
+        if (docxDocs.length > 0) {
+            logProcess('📄 Procesando ' + docxDocs.length + ' archivo(s) Word...', 'info');
+            
+            for (const doc of docxDocs) {
+                logProcess('  → ' + doc.name, 'info');
+                
+                try {
+                    const campaigns = await parseWordFile(doc);
+                    if (campaigns && campaigns.length > 0) {
+                        extractedCampaigns = extractedCampaigns.concat(campaigns);
+                        logProcess('  ✓ ' + campaigns.length + ' textos legales extraídos', 'success');
+                    }
+                } catch (err) {
+                    logProcess('  ✗ Error: ' + err.message, 'error');
+                    console.error('Error detallado:', err);
+                }
+            }
+        }
+        
+        // Guardar datos de financiación
+        if (allExtracted.sin_intereses.length > 0 || allExtracted.con_intereses.length > 0) {
+            localStorage.setItem('legalTexts_extractedData', JSON.stringify(allExtracted));
+            updateRulesWithExtracted(allExtracted);
+            showExtractedData(allExtracted);
+            logProcess('✓ Datos de financiación actualizados', 'success');
+        }
+        
+        // Guardar campañas extraídas
+        if (extractedCampaigns.length > 0) {
+            // Combinar con campañas existentes o reemplazar
+            CAMPAIGNS = extractedCampaigns;
+            saveCampaigns();
+            logProcess('✓ ' + extractedCampaigns.length + ' campañas guardadas', 'success');
+            renderLibrary();
+        }
+        
+        if (allExtracted.sin_intereses.length > 0 || allExtracted.con_intereses.length > 0 || extractedCampaigns.length > 0) {
+            toast('Documentos procesados correctamente', 'success');
+            renderHome(); // Actualizar estado del Home
+        } else {
+            logProcess('No se pudieron extraer datos válidos', 'warning');
+            toast('No se encontraron datos para extraer', 'warning');
+        }
+    }
+
+    async function parseExcelFile(doc) {
+        return new Promise((resolve, reject) => {
+            try {
+                const workbook = XLSX.read(doc.data, { type: 'array' });
+                const fileName = doc.name.toLowerCase();
+                
+                // FILTRO: Solo procesar archivos tipo "Calculadora"
+                const isCalculadora = fileName.includes('calculadora') || 
+                                     fileName.includes('sin_intereses') || 
+                                     fileName.includes('sin intereses') ||
+                                     fileName.includes('aplazado') ||
+                                     fileName.includes('con_intereses');
+                
+                if (!isCalculadora) {
+                    logProcess('  ⏭️ Saltando: no es una calculadora de financiación', 'warning');
+                    logProcess('  💡 Para plazos de financiación, usa archivos tipo "Calculadora_Sin_Intereses" o "Calculadora_Aplazado"', 'info');
+                    resolve(null);
+                    return;
+                }
+                
+                // Buscar la hoja correcta (la que tiene "TARIFA" o "IFMC")
+                let sheetName = workbook.SheetNames[0];
+                for (const name of workbook.SheetNames) {
+                    const nameLower = name.toLowerCase();
+                    if (nameLower.includes('tarifa') || nameLower.includes('ifmc') || nameLower.includes('ikea')) {
+                        sheetName = name;
+                        break;
+                    }
+                }
+                
+                const sheet = workbook.Sheets[sheetName];
+                const data = XLSX.utils.sheet_to_json(sheet, { header: 1 });
+                
+                logProcess('  📄 Hoja: ' + sheetName, 'data');
+                logProcess('  📊 Filas: ' + data.length, 'data');
+                
+                // Detectar tipo por nombre de archivo
+                const isSinIntereses = fileName.includes('sin_intereses') || fileName.includes('sin intereses');
+                const isConIntereses = fileName.includes('aplazado') || fileName.includes('con_intereses') || fileName.includes('con intereses');
+                
+                const tipoDetectado = isSinIntereses ? 'SIN INTERESES' : 'CON INTERESES';
+                logProcess('  🏷️ Tipo: ' + tipoDetectado, 'success');
+                
+                // Extraer plazos
+                const plazos = extractPlazos(data, isConIntereses);
+                
+                if (plazos.length > 0) {
+                    logProcess('  ✅ ' + plazos.length + ' plazos extraídos', 'success');
+                    resolve({
+                        type: isSinIntereses ? 'sin_intereses' : 'con_intereses',
+                        plazos: plazos
+                    });
+                } else {
+                    logProcess('  ❌ No se encontraron plazos válidos', 'error');
+                    resolve(null);
+                }
+            } catch (err) {
+                reject(err);
+            }
+        });
+    }
+
+    // Parser de documentos Word
+    async function parseWordFile(doc) {
+        return new Promise((resolve, reject) => {
+            mammoth.extractRawText({ arrayBuffer: doc.data })
+                .then(result => {
+                    const text = result.value;
+                    const campaigns = extractCampaignsFromText(text, doc.name);
+                    resolve(campaigns);
+                })
+                .catch(err => {
+                    reject(err);
+                });
+        });
+    }
+
+    function extractCampaignsFromText(text, fileName) {
+        const campaigns = [];
+        let campaignId = 1;
+        
+        // Detectar tipo de tarjeta por nombre de archivo
+        const fileNameLower = fileName.toLowerCase();
+        let defaultCard = 'ifmc';
+        if (fileNameLower.includes('ventajon')) defaultCard = 'vjon';
+        else if (fileNameLower.includes('ikea family') || fileNameLower.includes('ifmc')) defaultCard = 'ifmc';
+        
+        // Dividir en párrafos
+        const paragraphs = text.split(/\n+/).map(p => p.trim()).filter(p => p.length > 50);
+        
+        // Patrones para identificar textos legales completos
+        const legalPatterns = [
+            { regex: /La tarjeta IKEA Family Mastercard es emitida por Santander/i, card: 'ifmc' },
+            { regex: /La tarjeta VENTAJON es emitida por.*CaixaBank/i, card: 'vjon' },
+            { regex: /La tarjeta VENTAJON Visa es emitida/i, card: 'vjon' },
+            { regex: /La tarjeta débito VENTAJON es emitida por PECUNIA/i, card: 'tdv' }
+        ];
+        
+        // Patrones para detectar tipo de promoción
+        const promoPatterns = [
+            { keywords: ['bienvenida', '5 días', 'fecha de alta', 'primer día'], type: 'bienvenida' },
+            { keywords: ['cumpleaños', 'día del cumpleaños', 'dos días antes'], type: 'cumpleanos' },
+            { keywords: ['cash back xtra', 'cashback xtra', '2%', 'cualquier comercio'], type: 'cashback_xtra' },
+            { keywords: ['financiación', 'tin 0%', 'tae 0%', 'sin intereses', 'meses sin intereses'], type: 'financiacion_sin' },
+            { keywords: ['financiación', 'con intereses', 'tin 16%', 'tin 10,99%'], type: 'financiacion_con' },
+            { keywords: ['cheque de compra', 'cheque compra', '5% de descuento', '10% de descuento'], type: 'cheque' },
+            { keywords: ['cash back', 'cashback', '%'], type: 'cashback' }
+        ];
+        
+        // Patrones para detectar geografía
+        const geoPatterns = [
+            { keywords: ['baleares y canarias', 'ikea baleares y canarias'], geo: 'baleares,canarias' },
+            { keywords: ['baleares'], geo: 'baleares' },
+            { keywords: ['canarias', 'tenerife', 'gran canaria', 'lanzarote'], geo: 'canarias' },
+            { keywords: ['península', 'peninsular'], geo: 'peninsula' }
+        ];
+        
+        for (const para of paragraphs) {
+            const paraLower = para.toLowerCase();
+            
+            // Verificar si es un texto legal (contiene patrón de emisor)
+            let detectedCard = null;
+            for (const pattern of legalPatterns) {
+                if (pattern.regex.test(para)) {
+                    detectedCard = pattern.card;
+                    break;
+                }
+            }
+            
+            if (!detectedCard) continue; // No es un texto legal válido
+            
+            // Detectar tipo de promoción
+            let detectedType = 'cashback'; // Default
+            for (const pattern of promoPatterns) {
+                const matches = pattern.keywords.filter(kw => paraLower.includes(kw));
+                if (matches.length >= 1) {
+                    detectedType = pattern.type;
+                    break;
+                }
+            }
+            
+            // Detectar geografía
+            let detectedGeo = 'baleares,canarias'; // Default
+            for (const pattern of geoPatterns) {
+                const matches = pattern.keywords.filter(kw => paraLower.includes(kw));
+                if (matches.length >= 1) {
+                    detectedGeo = pattern.geo;
+                    break;
+                }
+            }
+            
+            // Generar título descriptivo
+            let title = RULES.cardNames[detectedCard] + ' - ' + RULES.promoNames[detectedType];
+            
+            // Extraer porcentaje si existe
+            const pctMatch = para.match(/(\d+)%\s*(cash\s*back|descuento)/i);
+            let desc = RULES.promoNames[detectedType];
+            if (pctMatch) {
+                desc = pctMatch[1] + '% ' + (pctMatch[2] || '');
+            }
+            
+            // Limpiar el texto (quitar asteriscos duplicados, normalizar espacios)
+            let cleanText = para
+                .replace(/\*+/g, '*')
+                .replace(/\s+/g, ' ')
+                .trim();
+            
+            // Evitar duplicados (textos muy similares)
+            const isDuplicate = campaigns.some(c => {
+                const similarity = calculateSimilarity(c.text, cleanText);
+                return similarity > 0.85;
+            });
+            
+            if (!isDuplicate && cleanText.length > 100) {
+                campaigns.push({
+                    id: campaignId++,
+                    card: detectedCard,
+                    type: detectedType,
+                    geo: detectedGeo,
+                    title: title,
+                    desc: desc.substring(0, 50),
+                    text: cleanText
+                });
+                
+                logProcess('    + ' + title + ' (' + detectedGeo + ')', 'data');
+            }
+        }
+        
+        return campaigns;
+    }
+
+    // Función para calcular similitud entre textos (Jaccard)
+    function calculateSimilarity(text1, text2) {
+        const words1 = new Set(text1.toLowerCase().split(/\s+/));
+        const words2 = new Set(text2.toLowerCase().split(/\s+/));
+        
+        const intersection = new Set([...words1].filter(x => words2.has(x)));
+        const union = new Set([...words1, ...words2]);
+        
+        return intersection.size / union.size;
+    }
+
+    function extractPlazos(data, conIntereses) {
+        const plazos = [];
+        const validMonths = [3, 6, 9, 10, 12, 18, 24, 30, 36, 42, 48, 52, 54, 60];
+        
+        // Buscar la MEJOR fila de encabezados (la que tiene Importe Mínimo Y Máximo)
+        let headerRowIdx = -1;
+        let colIndices = {
+            code: -1,
+            months: -1,
+            minAmount: -1,
+            maxAmount: -1,
+            tin: -1,
+            description: -1
+        };
+        
+        // Buscar la tabla de referencia (con Importe Mínimo y Máximo)
+        for (let i = 0; i < data.length; i++) {
+            const row = data[i];
+            if (!row) continue;
+            
+            const rowStr = row.map(c => String(c || '').toLowerCase()).join(' ');
+            
+            // Priorizar filas que tienen TANTO "mínimo" como "máximo" - son las tablas de referencia
+            const hasMinimoMaximo = rowStr.includes('mínimo') && rowStr.includes('máximo');
+            const hasDescripcion = rowStr.includes('descripción') || rowStr.includes('descripcion');
+            
+            // Solo considerar esta fila si tiene mínimo+máximo o descripción (tabla de referencia)
+            if (hasMinimoMaximo || (hasDescripcion && rowStr.includes('código'))) {
+                headerRowIdx = i;
+                
+                // Identificar índices de cada columna
+                for (let j = 0; j < row.length; j++) {
+                    const cell = String(row[j] || '').toLowerCase();
+                    if (cell.includes('código') || (cell.includes('forma') && cell.includes('pago'))) colIndices.code = j;
+                    if (cell.includes('plazo') && !cell.includes('forma')) colIndices.months = j;
+                    if (cell.includes('mínimo') || cell.includes('minimo')) colIndices.minAmount = j;
+                    if (cell.includes('máximo') || cell.includes('maximo')) colIndices.maxAmount = j;
+                    if (cell.includes('tin') || cell.includes('coste cliente')) colIndices.tin = j;
+                    if (cell.includes('descripción') || cell.includes('descripcion')) colIndices.description = j;
+                }
+                
+                logProcess('  📋 Encabezados fila ' + (i+1) + ': mín=' + colIndices.minAmount + ', máx=' + colIndices.maxAmount, 'data');
+                break;
+            }
+        }
+        
+        // Fallback: buscar cualquier fila con "código"
+        if (headerRowIdx === -1) {
+            for (let i = 0; i < data.length; i++) {
+                const row = data[i];
+                if (!row) continue;
+                
+                const rowStr = row.map(c => String(c || '').toLowerCase()).join(' ');
+                
+                if (rowStr.includes('código') || rowStr.includes('plazo')) {
+                    headerRowIdx = i;
+                    
+                    for (let j = 0; j < row.length; j++) {
+                        const cell = String(row[j] || '').toLowerCase();
+                        if (cell.includes('código')) colIndices.code = j;
+                        if (cell.includes('plazo')) colIndices.months = j;
+                        if (cell.includes('mínimo')) colIndices.minAmount = j;
+                        if (cell.includes('máximo')) colIndices.maxAmount = j;
+                        if (cell.includes('tin')) colIndices.tin = j;
+                        if (cell.includes('descripción')) colIndices.description = j;
+                    }
+                    
+                    logProcess('  📋 Encabezados (fallback) fila ' + (i+1), 'data');
+                    break;
+                }
+            }
+        }
+        
+        if (headerRowIdx === -1) {
+            logProcess('  ⚠️ No se encontraron encabezados', 'warning');
+            return [];
+        }
+        
+        // Si encontramos encabezados, extraer datos de las filas siguientes
+        if (headerRowIdx >= 0) {
+            for (let i = headerRowIdx + 1; i < data.length; i++) {
+                const row = data[i];
+                if (!row || row.length < 2) continue;
+                
+                let code = null;
+                let months = null;
+                let minAmount = null;
+                let maxAmount = null;
+                let tin = 0;
+                
+                // Extraer por índice de columna si lo conocemos
+                if (colIndices.code >= 0 && row[colIndices.code] != null) {
+                    code = String(row[colIndices.code]).padStart(3, '0');
+                }
+                
+                if (colIndices.months >= 0 && typeof row[colIndices.months] === 'number') {
+                    months = row[colIndices.months];
+                }
+                
+                if (colIndices.minAmount >= 0 && typeof row[colIndices.minAmount] === 'number') {
+                    minAmount = row[colIndices.minAmount];
+                }
+                
+                if (colIndices.maxAmount >= 0 && typeof row[colIndices.maxAmount] === 'number') {
+                    maxAmount = row[colIndices.maxAmount];
+                }
+                
+                if (colIndices.tin >= 0 && typeof row[colIndices.tin] === 'number') {
+                    // TIN puede venir como decimal (0.16) o porcentaje (16)
+                    tin = row[colIndices.tin] < 1 ? row[colIndices.tin] * 100 : row[colIndices.tin];
+                }
+                
+                // Si hay columna de descripción, extraer meses de ahí
+                if (colIndices.description >= 0 && row[colIndices.description]) {
+                    const desc = String(row[colIndices.description]);
+                    const match = desc.match(/(\d+)\s*meses/i);
+                    if (match) {
+                        months = parseInt(match[1]);
+                    }
+                }
+                
+                // Fallback: buscar en toda la fila
+                if (!months || !minAmount) {
+                    for (let j = 0; j < row.length; j++) {
+                        const cell = row[j];
+                        if (cell == null) continue;
+                        
+                        const cellStr = String(cell);
+                        
+                        // Detectar meses en texto "X meses"
+                        if (!months) {
+                            const monthsMatch = cellStr.match(/(\d+)\s*meses/i);
+                            if (monthsMatch) {
+                                const m = parseInt(monthsMatch[1]);
+                                if (validMonths.includes(m)) months = m;
+                            }
+                        }
+                        
+                        // Detectar meses como número directo
+                        if (!months && typeof cell === 'number' && validMonths.includes(cell)) {
+                            months = cell;
+                        }
+                        
+                        // Detectar código
+                        if (!code && /^[0-9]{2,3}$/.test(cellStr)) {
+                            code = cellStr.padStart(3, '0');
+                        }
+                        
+                        // Detectar importes (entre 90 y 3000)
+                        if (!minAmount && typeof cell === 'number' && cell >= 90 && cell <= 3000) {
+                            minAmount = cell;
+                        }
+                        
+                        // Detectar máximo (entre 3000 y 10000)
+                        if (!maxAmount && typeof cell === 'number' && cell >= 3000 && cell <= 10000) {
+                            maxAmount = cell;
+                        }
+                        
+                        // Detectar TIN
+                        if (conIntereses && !tin && typeof cell === 'number') {
+                            if (cell > 0 && cell < 1) {
+                                tin = cell * 100; // Convertir de decimal
+                            } else if (cell >= 5 && cell <= 20) {
+                                tin = cell;
+                            }
+                        }
+                    }
+                }
+                
+                // Validar y agregar plazo
+                if (months && validMonths.includes(months) && minAmount) {
+                    plazos.push({
+                        code: code || String(months).padStart(3, '0'),
+                        months: months,
+                        min: Math.round(minAmount), // Redondear a entero
+                        max: Math.round(maxAmount || (conIntereses ? 8000 : 6000)),
+                        tin: Math.round(tin * 100) / 100 // Redondear a 2 decimales
+                    });
+                    logProcess('    ✓ ' + months + 'm, mín ' + Math.round(minAmount) + '€' + (tin ? ', TIN ' + tin.toFixed(2) + '%' : ''), 'data');
+                }
+            }
+        } else {
+            // Fallback: método anterior sin encabezados
+            logProcess('  No se encontraron encabezados, usando detección por contenido...', 'warning');
+            
+            for (let i = 0; i < data.length; i++) {
+                const row = data[i];
+                if (!row || row.length < 3) continue;
+                
+                let code = null, months = null, minAmount = null, maxAmount = null, tin = 0;
+                
+                for (let j = 0; j < row.length; j++) {
+                    const cell = row[j];
+                    if (cell == null) continue;
+                    
+                    const cellStr = String(cell);
+                    
+                    if (!code && /^[0-9]{2,3}$/.test(cellStr)) {
+                        code = cellStr.padStart(3, '0');
+                    }
+                    
+                    const monthsMatch = cellStr.match(/(\d+)\s*meses/i);
+                    if (monthsMatch) {
+                        const m = parseInt(monthsMatch[1]);
+                        if (validMonths.includes(m)) months = m;
+                    }
+                    
+                    if (!months && typeof cell === 'number' && validMonths.includes(cell)) {
+                        months = cell;
+                    }
+                    
+                    if (conIntereses && typeof cell === 'number' && cell > 0 && cell <= 20) {
+                        if (cell < 1) tin = cell * 100;
+                        else if (cell >= 5 && cell <= 20) tin = cell;
+                    }
+                    
+                    if (typeof cell === 'number' && cell >= 90 && cell <= 3000) {
+                        if (!minAmount || cell < minAmount) minAmount = cell;
+                    }
+                    
+                    if (typeof cell === 'number' && cell >= 3000 && cell <= 10000) {
+                        maxAmount = cell;
+                    }
+                }
+                
+                if (months && minAmount) {
+                    plazos.push({
+                        code: code || String(months).padStart(3, '0'),
+                        months: months,
+                        min: minAmount,
+                        max: maxAmount || (conIntereses ? 8000 : 6000),
+                        tin: Math.round(tin * 100) / 100
+                    });
+                    logProcess('    ✓ Plazo: ' + months + ' meses, mín ' + minAmount + '€' + (tin ? ', TIN ' + tin.toFixed(2) + '%' : ''), 'data');
+                }
+            }
+        }
+        
+        // Eliminar duplicados por meses (mantener el primero)
+        const uniquePlazos = [];
+        const seenMonths = new Set();
+        for (const p of plazos) {
+            if (!seenMonths.has(p.months)) {
+                seenMonths.add(p.months);
+                uniquePlazos.push(p);
+            }
+        }
+        
+        return uniquePlazos.sort((a, b) => a.months - b.months);
+    }
+
+    function updateRulesWithExtracted(extracted) {
+        // Actualizar RULES con los datos extraídos
+        if (extracted.sin_intereses.length > 0) {
+            RULES.plazos_sin.ifmc = extracted.sin_intereses.map(p => ({
+                code: p.code,
+                months: p.months,
+                min: p.min,
+                max: p.max,
+                tin: 0
+            }));
+            logProcess('Actualizados ' + extracted.sin_intereses.length + ' plazos SIN intereses para IFMC', 'success');
+        }
+        
+        if (extracted.con_intereses.length > 0) {
+            RULES.plazos_con.ifmc = extracted.con_intereses.map(p => ({
+                code: p.code,
+                months: p.months,
+                min: p.min,
+                max: p.max,
+                tin: p.tin
+            }));
+            logProcess('Actualizados ' + extracted.con_intereses.length + ' plazos CON intereses para IFMC', 'success');
+        }
+    }
+
+    function showExtractedData(extracted) {
+        const container = document.getElementById('extractedData');
+        const content = document.getElementById('extractedContent');
+        if (!container || !content) return;
+        
+        container.style.display = 'block';
+        
+        let html = '';
+        
+        if (extracted.sin_intereses && extracted.sin_intereses.length > 0) {
+            html += '<div style="margin-bottom:1rem;"><strong>Sin Intereses (TIN 0%)</strong>';
+            html += '<table class="extracted-table"><tr><th>Meses</th><th>Mín</th><th>Máx</th><th>Código</th></tr>';
+            extracted.sin_intereses.forEach(p => {
+                html += '<tr><td>' + p.months + '</td><td>' + Math.round(p.min) + '€</td><td>' + Math.round(p.max) + '€</td><td>' + p.code + '</td></tr>';
+            });
+            html += '</table></div>';
+        }
+        
+        if (extracted.con_intereses && extracted.con_intereses.length > 0) {
+            html += '<div><strong>Con Intereses</strong>';
+            html += '<table class="extracted-table"><tr><th>Meses</th><th>TIN</th><th>Mín</th><th>Máx</th><th>Código</th></tr>';
+            extracted.con_intereses.forEach(p => {
+                const tinDisplay = (p.tin % 1 === 0) ? p.tin : p.tin.toFixed(2);
+                html += '<tr><td>' + p.months + '</td><td>' + tinDisplay + '%</td><td>' + Math.round(p.min) + '€</td><td>' + Math.round(p.max) + '€</td><td>' + p.code + '</td></tr>';
+            });
+            html += '</table></div>';
+        }
+        
+        content.innerHTML = html || '<p style="color:var(--text-muted);">No hay datos extraídos</p>';
+    }
+
+    // Cargar datos extraídos al iniciar
+    function loadExtractedData() {
+        const saved = localStorage.getItem('legalTexts_extractedData');
+        if (saved) {
+            try {
+                const extracted = JSON.parse(saved);
+                updateRulesWithExtracted(extracted);
+                // Mostrar en UI si estamos en la pantalla de documentos
+                if (document.getElementById('extractedData')) {
+                    showExtractedData(extracted);
+                }
+            } catch (e) {
+                console.error('Error cargando datos extraídos:', e);
+            }
+        }
+    }
+
+    function copyText() {
+        const txt = document.getElementById('legalOutput').innerText;
+        if (txt.includes('Configura')) { toast('Genera primero','warning'); return; }
+        navigator.clipboard.writeText(txt).then(() => toast('Copiado','success'));
+    }
+
+    function editText() {
+        const el = document.getElementById('legalOutput');
+        if (el.innerText.includes('Configura')) { toast('Genera primero','warning'); return; }
+        el.contentEditable = el.contentEditable === 'true' ? 'false' : 'true';
+        el.style.border = el.contentEditable === 'true' ? '2px solid var(--ikea-blue)' : '1px solid var(--border-color)';
+        if (el.contentEditable === 'true') { el.focus(); toast('Modo edición','success'); }
+    }
+
+    function exportText() {
+        const txt = document.getElementById('legalOutput').innerText;
+        if (txt.includes('Configura')) { toast('Genera primero','warning'); return; }
+        const blob = new Blob([txt], {type:'text/plain;charset=utf-8'});
+        const a = document.createElement('a');
+        a.href = URL.createObjectURL(blob);
+        a.download = 'texto_legal_' + new Date().toISOString().slice(0,10) + '.txt';
+        a.click();
+        toast('Exportado','success');
+    }
+
+    function toast(msg, type) {
+        const t = document.createElement('div');
+        t.className = 'toast' + (type === 'success' ? ' success' : '');
+        t.textContent = msg;
+        document.getElementById('toastContainer').appendChild(t);
+        setTimeout(() => t.remove(), 3000);
+    }
+    </script>
+</body>
+</html>
