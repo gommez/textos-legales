@@ -654,7 +654,6 @@
                 ifmc: RULES.plazos_con.ifmc || []
             }
         };
-        downloadJSON(plazosData, 'plazos.json');
         
         // Crear JSON de campañas (siempre, aunque esté vacío)
         const campanasData = {
@@ -662,9 +661,15 @@
             updated: today,
             campaigns: CAMPAIGNS || []
         };
-        downloadJSON(campanasData, 'campanas.json');
         
-        toast('2 archivos exportados (plazos.json + campanas.json). Súbelos a /data/ en GitHub.', 'success');
+        // Descargar primero plazos
+        downloadJSON(plazosData, 'plazos.json');
+        
+        // Descargar campañas con retraso para evitar bloqueo del navegador
+        setTimeout(() => {
+            downloadJSON(campanasData, 'campanas.json');
+            toast('2 archivos exportados. Súbelos a /data/ en GitHub.', 'success');
+        }, 500);
     }
     
     // Descargar archivo JSON
