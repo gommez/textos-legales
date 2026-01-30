@@ -1392,9 +1392,29 @@
     }
 
     function removeDoc(i) { 
+        const docName = docs[i].name;
         docs.splice(i,1); 
         saveDocs();
+        
+        // Si era un Word, limpiar campañas que vinieron de ese documento
+        if (docName.endsWith('.docx') || docName.endsWith('.doc')) {
+            // Limpiar todas las campañas (ya que vienen de Word)
+            CAMPAIGNS = [];
+            saveCampaigns();
+        }
+        
+        // Si era un Excel, limpiar plazos
+        if (docName.endsWith('.xlsx') || docName.endsWith('.xls')) {
+            RULES.plazos_sin.ifmc = [];
+            RULES.plazos_sin.vjon = [];
+            RULES.plazos_con.ifmc = [];
+            localStorage.removeItem('legalTexts_extractedData');
+            const extractedDiv = document.getElementById('extractedData');
+            if (extractedDiv) extractedDiv.style.display = 'none';
+        }
+        
         renderDocs(); 
+        renderHome();
         toast('Documento eliminado','success'); 
     }
     
@@ -1403,12 +1423,21 @@
         
         try {
             docs = [];
+            CAMPAIGNS = [];
+            RULES.plazos_sin.ifmc = [];
+            RULES.plazos_sin.vjon = [];
+            RULES.plazos_con.ifmc = [];
+            
             saveDocs();
+            saveCampaigns();
             localStorage.removeItem('legalTexts_extractedData');
+            
             const extractedDiv = document.getElementById('extractedData');
             if (extractedDiv) extractedDiv.style.display = 'none';
+            
             renderDocs();
-            toast('Todos los documentos eliminados','success');
+            renderHome();
+            toast('Todos los documentos y datos eliminados','success');
         } catch (e) {
             console.error('Error al eliminar:', e);
             toast('Error al eliminar documentos', 'error');
