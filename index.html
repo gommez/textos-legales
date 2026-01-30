@@ -182,10 +182,39 @@
         .toast { background: var(--text-primary); color: white; padding: 0.75rem 1rem; border-radius: var(--radius-md); margin-top: 0.5rem; font-size: 0.85rem; animation: slideIn 0.3s; }
         .toast.success { background: var(--success); }
         @keyframes slideIn { from { transform: translateX(100%); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
+        /* Modal Login */
+        .modal-overlay { position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.5); z-index: 2000; display: flex; align-items: center; justify-content: center; }
+        .modal-overlay.hidden { display: none; }
+        .modal-box { background: white; border-radius: var(--radius-lg); padding: 2rem; width: 90%; max-width: 360px; box-shadow: 0 10px 40px rgba(0,0,0,0.2); }
+        .modal-title { font-size: 1.25rem; font-weight: 600; margin-bottom: 0.5rem; text-align: center; }
+        .modal-subtitle { font-size: 0.85rem; color: var(--text-muted); text-align: center; margin-bottom: 1.5rem; }
+        .modal-input { width: 100%; padding: 0.75rem; border: 1px solid var(--border-color); border-radius: var(--radius-sm); font-size: 0.9rem; margin-bottom: 1rem; box-sizing: border-box; }
+        .modal-input:focus { outline: none; border-color: var(--ikea-blue); }
+        .modal-btn { width: 100%; padding: 0.75rem; background: var(--ikea-blue); color: white; border: none; border-radius: var(--radius-sm); font-size: 0.9rem; font-weight: 500; cursor: pointer; }
+        .modal-btn:hover { background: #003d99; }
+        .modal-error { color: #c62828; font-size: 0.8rem; text-align: center; margin-bottom: 1rem; display: none; }
+        .modal-cancel { width: 100%; padding: 0.5rem; background: none; border: none; color: var(--text-muted); font-size: 0.85rem; cursor: pointer; margin-top: 0.75rem; }
+        .modal-cancel:hover { color: var(--text-primary); }
+        .logged-user { font-size: 0.8rem; color: var(--text-muted); display: flex; align-items: center; gap: 0.5rem; padding: 0.5rem 0.75rem; background: #E8F5E9; border-radius: var(--radius-sm); margin-bottom: 1rem; }
+        .logged-user strong { color: #2E7D32; }
+        .doc-uploader { font-size: 0.7rem; color: var(--text-muted); }
         @media (max-width: 1100px) { .creator-layout, .library-layout, .docs-layout { grid-template-columns: 1fr; } .sidebar, .library-filters { position: static; } .info-cards { grid-template-columns: 1fr; } .home-options { grid-template-columns: 1fr; max-width: 320px; } }
     </style>
 </head>
 <body>
+    <!-- Modal Login -->
+    <div class="modal-overlay hidden" id="loginModal">
+        <div class="modal-box">
+            <div class="modal-title">🔐 Acceso administrador</div>
+            <div class="modal-subtitle">Introduce tus credenciales para gestionar documentos</div>
+            <div class="modal-error" id="loginError">Usuario o contraseña incorrectos</div>
+            <input type="text" class="modal-input" id="loginUser" placeholder="Usuario" autocomplete="off">
+            <input type="password" class="modal-input" id="loginPass" placeholder="Contraseña" onkeypress="if(event.key==='Enter')doLogin()">
+            <button class="modal-btn" onclick="doLogin()">Acceder</button>
+            <button class="modal-cancel" onclick="closeLoginModal()">Cancelar</button>
+        </div>
+    </div>
+    
     <header class="header">
         <div class="header-content">
             <div class="logo-section" onclick="goHome()">
@@ -371,6 +400,10 @@
             </div>
             <div class="docs-layout">
                 <div class="docs-panel">
+                    <div class="logged-user" id="loggedUserInfo" style="display:none;">
+                        👤 Sesión: <strong id="loggedUserName"></strong>
+                        <span style="margin-left:auto;cursor:pointer;" onclick="logoutDocs()" title="Cerrar sesión">🚪</span>
+                    </div>
                     <h3 class="docs-title">📤 Subir documentos</h3>
                     <div class="upload-area" id="uploadArea" onclick="document.getElementById('fileInput').click()">
                         <p>Arrastra o <span>haz clic</span> para subir</p>
@@ -710,7 +743,59 @@
         renderLibrary(); 
         showScreen('libraryScreen'); 
     }
-    function goToDocuments() { renderDocs(); showScreen('documentsScreen'); }
+    function goToDocuments() { 
+        // Si no hay usuario logueado, mostrar modal
+        if (!currentUser) {
+            showLoginModal();
+            return;
+        }
+        renderDocs(); 
+        showScreen('documentsScreen');
+        document.getElementById('loggedUserInfo').style.display = 'flex';
+        document.getElementById('loggedUserName').textContent = currentUser.fullName;
+    }
+    
+    // Sistema de usuarios
+    const USERS = {
+        'Daniel': { pass: 'Daniel2026', fullName: 'Daniel Martínez' },
+        'David': { pass: 'David', fullName: 'David Tavira' }
+    };
+    
+    let currentUser = null;
+    
+    function showLoginModal() {
+        document.getElementById('loginModal').classList.remove('hidden');
+        document.getElementById('loginUser').value = '';
+        document.getElementById('loginPass').value = '';
+        document.getElementById('loginError').style.display = 'none';
+        document.getElementById('loginUser').focus();
+    }
+    
+    function closeLoginModal() {
+        document.getElementById('loginModal').classList.add('hidden');
+    }
+    
+    function doLogin() {
+        const user = document.getElementById('loginUser').value.trim();
+        const pass = document.getElementById('loginPass').value;
+        
+        if (USERS[user] && USERS[user].pass === pass) {
+            currentUser = { username: user, fullName: USERS[user].fullName };
+            closeLoginModal();
+            toast('Bienvenido, ' + currentUser.fullName, 'success');
+            goToDocuments();
+        } else {
+            document.getElementById('loginError').style.display = 'block';
+            document.getElementById('loginPass').value = '';
+        }
+    }
+    
+    function logoutDocs() {
+        currentUser = null;
+        document.getElementById('loggedUserInfo').style.display = 'none';
+        toast('Sesión cerrada', 'success');
+        goHome();
+    }
 
     function resetConfig() {
         currentStep = 1;
@@ -1200,7 +1285,8 @@
         document.getElementById('docList').innerHTML = docs.map((d,i) => {
             const hasData = d.data ? '' : ' style="opacity:0.5" title="Sin datos - volver a subir"';
             const noDataBadge = d.data ? '' : '<span style="background:#FFCDD2;color:#C62828;font-size:0.65rem;padding:0.1rem 0.3rem;border-radius:3px;margin-left:0.5rem;">⚠️ Resubir</span>';
-            return '<div class="doc-item"' + hasData + '><div class="doc-icon '+d.type+'">'+d.type.toUpperCase()+'</div><div class="doc-info"><div class="doc-name">'+d.name+noDataBadge+'</div><div class="doc-meta">'+d.date+'</div></div><div class="doc-actions"><button class="btn-doc delete" onclick="removeDoc('+i+')">🗑️</button></div></div>';
+            const uploaderInfo = d.uploadedBy ? '<div class="doc-uploader">👤 ' + d.uploadedBy + ' · ' + (d.uploadedAt || d.date) + '</div>' : '';
+            return '<div class="doc-item"' + hasData + '><div class="doc-icon '+d.type+'">'+d.type.toUpperCase()+'</div><div class="doc-info"><div class="doc-name">'+d.name+noDataBadge+'</div><div class="doc-meta">'+d.date+'</div>' + uploaderInfo + '</div><div class="doc-actions"><button class="btn-doc delete" onclick="removeDoc('+i+')">🗑️</button></div></div>';
         }).join('');
     }
 
@@ -1218,7 +1304,9 @@
                 pendingFiles.push({
                     name: f.name,
                     type: ext,
-                    file: f
+                    file: f,
+                    uploadedBy: currentUser ? currentUser.fullName : 'Desconocido',
+                    uploadedAt: new Date().toLocaleString('es-ES')
                 });
                 added++;
             }
@@ -1329,7 +1417,9 @@
                     name: pending.name,
                     date: new Date().toLocaleDateString('es-ES'),
                     type: pending.type,
-                    data: data
+                    data: data,
+                    uploadedBy: pending.uploadedBy,
+                    uploadedAt: pending.uploadedAt
                 });
             }
             
